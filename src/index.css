@@ -1,3 +1,100 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Background image reveal animation (used behind rotating orange) */
+@keyframes fadeInBg {
+  /* Start well below and rise up */
+  0% { opacity: 0; transform: translateY(30%) scale(0.98); }
+  100% { opacity: 0.7; transform: translateY(-50%) scale(1); }
+}
+
+.fade-in-bg {
+  /* Slower and unified timing */
+  animation: fadeInBg 1.6s ease-out 0.8s forwards;
+}
+
+/* Foreground mandarin reveal (non-conflicting with spin by using wrapper) */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(24px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.fade-in-up {
+  /* Match timing with background reveals */
+  animation: fadeInUp 1.6s ease-out 0.8s both;
+}
+
+/* Bottom-corner reveal for second background image */
+@keyframes fadeInBgBottom {
+  0% { opacity: 0; transform: translateY(30%) scale(0.98); }
+  100% { opacity: 0.7; transform: translateY(0) scale(1); }
+}
+
+.fade-in-bg-bottom {
+  /* Same timing as others for sync */
+  animation: fadeInBgBottom 1.6s ease-out 0.8s forwards;
+}
+
+/* Slide-up (no fade) for mandarin.png */
+@keyframes slideUp {
+  0% { transform: translateY(30%); }
+  100% { transform: translateY(0); }
+}
+
+.slide-up {
+  animation: slideUp 1.6s ease-out 0.8s both;
+}
+
+/* Clean text reveal for initial load */
+@keyframes textReveal {
+  0% { opacity: 0; transform: translateY(10px); filter: blur(4px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+.stagger > * {
+  opacity: 0;
+  animation: textReveal 1s ease-out forwards;
+}
+.stagger > *:nth-child(1) { animation-delay: 0.10s; }
+.stagger > *:nth-child(2) { animation-delay: 0.20s; }
+.stagger > *:nth-child(3) { animation-delay: 0.30s; }
+.stagger > *:nth-child(4) { animation-delay: 0.40s; }
+.stagger > *:nth-child(5) { animation-delay: 0.50s; }
+.stagger > *:nth-child(6) { animation-delay: 0.60s; }
+.stagger > *:nth-child(7) { animation-delay: 0.70s; }
+.stagger > *:nth-child(8) { animation-delay: 0.80s; }
+
+/* Scroll reveal utility (clean, subtle) */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 600ms ease-out, transform 600ms ease-out, filter 600ms ease-out;
+    filter: blur(2px);
+    will-change: opacity, transform, filter;
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  /* Variants */
+  .reveal-left { transform: translateX(-24px); }
+  .reveal-right { transform: translateX(24px); }
+  .reveal-zoom { transform: scale(.975); }
+  .reveal-left.in-view,
+  .reveal-right.in-view,
+  .reveal-zoom.in-view { transform: none; }
+  /* Small stagger for groups */
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 600ms ease-out, transform 600ms ease-out;
+  }
+  .reveal-stagger.in-view > * { opacity: 1; transform: translateY(0); }
+  .reveal-stagger.in-view > *:nth-child(1) { transition-delay: 60ms; }
+  .reveal-stagger.in-view > *:nth-child(2) { transition-delay: 120ms; }
+  .reveal-stagger.in-view > *:nth-child(3) { transition-delay: 180ms; }
+  .reveal-stagger.in-view > *:nth-child(4) { transition-delay: 240ms; }
+}
