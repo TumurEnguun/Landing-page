@@ -500,10 +500,10 @@ function App() {
             <p className="text-sm md:text-base font-semibold bg-gradient-to-r from-gray-400 to-gray-500 bg-clip-text text-transparent tracking-tight">Stay updated and say hi</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-reveal-stagger>
-            <a href="https://www.tiktok.com/@mandarin" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center">
+            <a href="https://www.tiktok.com/@MandarinPAy" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center">
               <div className="text-2xl mb-1">🎵</div>
               <div className="font-medium">TikTok</div>
-              <div className="text-gray-400 text-xs md:text-sm">@mandarin</div>
+              <div className="text-gray-400 text-xs md:text-sm">@MandarinPAy</div>
             </a>
             <a href="https://www.instagram.com/mandarin" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center" data-reveal>
               <div className="text-2xl mb-1">📸</div>
