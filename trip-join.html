@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join Mandarin Trip</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg-start: #0c090a;
+      --bg-end: #1c2b2b;
+      --fg: #ffffff;
+      --fg-muted: rgba(255, 255, 255, 0.85);
+      --primary: #00d4aa;
+      --primary-dark: #00b894;
+      --card: rgba(0, 0, 0, 0.28);
+      --border: rgba(255, 255, 255, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--fg);
+      padding: 32px 16px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 36px 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(0, 212, 170, 0.12);
+      border: 1px solid rgba(0, 212, 170, 0.35);
+      color: var(--primary);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 10px 18px;
+      text-transform: uppercase;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 34px);
+      font-weight: 700;
+    }
+
+    .lead {
+      margin: 16px 0 24px;
+      color: var(--fg-muted);
+      line-height: 1.6;
+    }
+
+    .trip-code {
+      display: inline-flex;
+      margin: 0 auto 24px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.1);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border 160ms ease;
+    }
+
+    .button.primary {
+      background: #ffffff;
+      color: var(--primary-dark);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+    }
+
+    .button.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+    }
+
+    .button.ghost {
+      background: transparent;
+      color: var(--fg);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .button.ghost:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .fallback {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .fallback p {
+      margin: 0 0 16px;
+      color: var(--fg-muted);
+      line-height: 1.6;
+    }
+
+    .store-links {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .footnote {
+      margin-top: 18px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (min-width: 540px) {
+      .store-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <div class="badge">Mandarin</div>
+      <h1>Join your trip</h1>
+      <p id="subtitle" class="lead">We are opening Mandarin so you can jump straight into the group.</p>
+      <div id="trip-code" class="trip-code" role="status" aria-live="polite" hidden></div>
+
+      <div class="actions" id="action-row">
+        <a id="open-app" class="button primary" href="#">Open in the app</a>
+      </div>
+
+      <div id="fallback" class="fallback" hidden>
+        <p>If nothing happens, install Mandarin and join with the trip code above or paste the invite link into the app.</p>
+        <div class="store-links">
+          <a class="button ghost" href="https://apps.apple.com/app/mandarin-expense-splitter/id1234567890" target="_blank" rel="noreferrer">Download for iOS</a>
+          <a class="button ghost" href="https://play.google.com/store/apps/details?id=com.mandarin.app" target="_blank" rel="noreferrer">Download for Android</a>
+        </div>
+        <button id="copy-link" class="button ghost" type="button">Copy invite link</button>
+      </div>
+    </section>
+    <p class="footnote">Need a hand? Email <a href="mailto:support@mandarin.app" style="color: inherit; font-weight: 600;">support@mandarin.app</a>.</p>
+  </main>
+
+  <script>
+    const subtitle = document.getElementById('subtitle');
+    const tripCodeEl = document.getElementById('trip-code');
+    const fallback = document.getElementById('fallback');
+    const openAppButton = document.getElementById('open-app');
+    const copyButton = document.getElementById('copy-link');
+    const actionRow = document.getElementById('action-row');
+
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    const lastSegment = pathParts[pathParts.length - 1];
+    const tripId = lastSegment && lastSegment !== 'join' ? lastSegment : '';
+
+    const inviteUrl = window.location.href;
+    let fallbackTimer;
+
+    if (tripId) {
+      tripCodeEl.textContent = `Trip code: ${tripId}`;
+      tripCodeEl.hidden = false;
+
+      const deepLink = `mandarinapp://join-trip?tripId=${encodeURIComponent(tripId)}`;
+      openAppButton.href = deepLink;
+      openAppButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.location.href = deepLink;
+      });
+
+      fallbackTimer = window.setTimeout(() => {
+        fallback.hidden = false;
+      }, 1800);
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden' && fallbackTimer) {
+          window.clearTimeout(fallbackTimer);
+        }
+      });
+
+      // Kick off the deep link immediately for mobile Safari and Chrome
+      window.location.href = deepLink;
+    } else {
+      tripCodeEl.hidden = true;
+      openAppButton.remove();
+      subtitle.textContent = 'This invite link looks incomplete. Ask the trip organizer to share it again or enter the code directly in Mandarin.';
+      fallback.hidden = false;
+    }
+
+    if (copyButton) {
+      copyButton.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(inviteUrl);
+          copyButton.textContent = 'Link copied';
+          window.setTimeout(() => {
+            copyButton.textContent = 'Copy invite link';
+          }, 2000);
+        } catch (error) {
+          copyButton.textContent = 'Copy failed';
+          window.setTimeout(() => {
+            copyButton.textContent = 'Copy invite link';
+          }, 2000);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,5 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Shield, Star, CheckCircle, Menu, X, Apple, Play } from 'lucide-react';
+import {
+  Users,
+  Shield,
+  Star,
+  CheckCircle,
+  Menu,
+  X,
+  Apple,
+  Play,
+  AlertTriangle,
+  HelpCircle,
+  PiggyBank,
+  Wallet,
+  Timer,
+  MessageCircle,
+  Music2,
+  Camera,
+  ThumbsUp,
+  Mail,
+} from 'lucide-react';
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -110,15 +129,6 @@ function App() {
               <span className="block">Make memories,</span>
               <span className="block">not math.</span>
             </h1>
-            
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight hidden">
-              We'll ask for your money—
-              <br />
-              <span className="bg-gradient-to-r from-gray-300 to-gray-100 bg-clip-text text-transparent">
-                so you don't have to
-              </span>
-            </h1>
-            
             <p className="text-lg md:text-xl text-gray-300 mb-6 max-w-3xl mx-auto md:mx-0 leading-relaxed md:text-left relative z-30">
               Split group expenses instantly. Track who owes what. Get your money back without the awkward conversations.
             </p>
@@ -230,7 +240,7 @@ function App() {
             <div className="space-y-8" data-reveal>
               <div className="flex items-start space-x-4">
                 <div className="bg-green-500/20 p-3 rounded-lg">
-                  <span className="text-green-400 text-xl">😰</span>
+                  <AlertTriangle aria-hidden="true" className="w-6 h-6 text-green-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">The Awkward Ask</h3>
@@ -242,7 +252,7 @@ function App() {
               
               <div className="flex items-start space-x-4">
                 <div className="bg-green-500/20 p-3 rounded-lg">
-                  <span className="text-green-400 text-xl">🤔</span>
+                  <HelpCircle aria-hidden="true" className="w-6 h-6 text-green-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">The Confusion</h3>
@@ -254,7 +264,7 @@ function App() {
               
               <div className="flex items-start space-x-4">
                 <div className="bg-green-500/20 p-3 rounded-lg">
-                  <span className="text-green-400 text-xl">💸</span>
+                  <PiggyBank aria-hidden="true" className="w-6 h-6 text-green-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">The Lost Money</h3>
@@ -267,7 +277,7 @@ function App() {
             
             <div className="bg-gradient-to-br from-gray-700/20 to-gray-600/20 p-8 rounded-2xl border border-gray-600/30" data-reveal>
               <h3 className="text-2xl font-bold mb-4 text-center">
-                🍊 Mandarin handles it all
+                Mandarin handles it all
               </h3>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -352,7 +362,7 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-gray-500/50 transition-all duration-300">
               <div className="bg-green-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-2xl">💰</span>
+                <Wallet aria-hidden="true" className="w-6 h-6 text-green-400" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Get Your Money Back</h3>
               <p className="text-gray-400">
@@ -362,7 +372,7 @@ function App() {
             
             <div className="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-gray-500/50 transition-all duration-300">
               <div className="bg-blue-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-2xl">⚡</span>
+                <Timer aria-hidden="true" className="w-6 h-6 text-blue-400" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Instant Splitting</h3>
               <p className="text-gray-400">
@@ -372,7 +382,7 @@ function App() {
             
             <div className="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-gray-500/50 transition-all duration-300">
               <div className="bg-gray-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-2xl">🤝</span>
+                <MessageCircle aria-hidden="true" className="w-6 h-6 text-gray-300" />
               </div>
               <h3 className="text-xl font-semibold mb-3">No Awkward Conversations</h3>
               <p className="text-gray-400">
@@ -397,7 +407,7 @@ function App() {
             {/* Check Your Trip Balances */}
             <div className="text-center flex flex-col h-full bg-gray-800 md:bg-transparent rounded-none md:rounded-2xl pt-6 pb-0 px-4 md:p-0 -mx-4" data-reveal="left">
               <h3 className="text-3xl md:text-4xl font-bold mb-2">Check Your Trip Balances</h3>
-              <p className="text-gray-300 mb-3 md:mb-4">Easily view each participant’s balance at any time, ensuring clear and transparent tracking throughout the trip.</p>
+              <p className="text-gray-300 mb-3 md:mb-4">Easily view each participant's balance at any time, ensuring clear and transparent tracking throughout the trip.</p>
               <div className="relative w-[80%] mx-auto rounded-2xl mt-4 md:mt-auto">
                 <img
                   src="/balances.png"
@@ -466,7 +476,7 @@ function App() {
                 </div>
               </div>
               <p className="text-gray-300">
-                "No more spreadsheets or awkward texts. Our group uses this for everything now—dinners, trips, utilities."
+                "No more spreadsheets or awkward texts. Our group uses this for everything now for dinners, trips, and utilities."
               </p>
             </div>
             
@@ -501,22 +511,30 @@ function App() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-reveal-stagger>
             <a href="https://www.tiktok.com/@MandarinPAy" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center">
-              <div className="text-2xl mb-1">🎵</div>
+              <div className="flex justify-center mb-1">
+                <Music2 aria-hidden="true" className="w-6 h-6 text-emerald-300" />
+              </div>
               <div className="font-medium">TikTok</div>
               <div className="text-gray-400 text-xs md:text-sm">@MandarinPAy</div>
             </a>
             <a href="https://www.instagram.com/mandarin" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center" data-reveal>
-              <div className="text-2xl mb-1">📸</div>
+              <div className="flex justify-center mb-1">
+                <Camera aria-hidden="true" className="w-6 h-6 text-pink-300" />
+              </div>
               <div className="font-medium">Instagram</div>
               <div className="text-gray-400 text-xs md:text-sm">@mandarin</div>
             </a>
             <a href="https://www.facebook.com/mandarin" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center" data-reveal>
-              <div className="text-2xl mb-1">👍</div>
+              <div className="flex justify-center mb-1">
+                <ThumbsUp aria-hidden="true" className="w-6 h-6 text-blue-300" />
+              </div>
               <div className="font-medium">Facebook</div>
               <div className="text-gray-400 text-xs md:text-sm">/mandarin</div>
             </a>
             <a href="mailto:support@mandarin.app" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center" data-reveal>
-              <div className="text-2xl mb-1">✉️</div>
+              <div className="flex justify-center mb-1">
+                <Mail aria-hidden="true" className="w-6 h-6 text-amber-300" />
+              </div>
               <div className="font-medium">Email</div>
               <div className="text-gray-400 text-xs md:text-sm">support@mandarin.app</div>
             </a>
@@ -544,10 +562,11 @@ function App() {
 
       {/* Footer (minimal, no logo/brand) */}
       <div className="py-8 border-t border-gray-800 text-center text-gray-400">
-        © 2025 Mandarin
+        (c) 2025 Mandarin
       </div>
     </div>
   );
 }
 
 export default App;
+
