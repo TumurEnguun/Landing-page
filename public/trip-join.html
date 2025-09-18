@@ -7,15 +7,15 @@
     <style>
       :root {
         color-scheme: light;
-        --bg-start: #eef7ff;
-        --bg-end: #d8f5ff;
+        --bg-start: #0b2a1d;
+        --bg-end: #1f6f4d;
         --fg: #0f172a;
-        --fg-muted: #475569;
-        --primary: #2563eb;
-        --primary-hover: #1d4ed8;
-        --card: rgba(255, 255, 255, 0.88);
-        --border: rgba(15, 23, 42, 0.12);
-        --shadow: 0 20px 60px rgba(15, 23, 42, 0.1);
+        --fg-muted: #334155;
+        --card: rgba(255, 255, 255, 0.9);
+        --border: rgba(15, 23, 42, 0.16);
+        --shadow: 0 28px 60px rgba(2, 27, 18, 0.35);
+        --accent: #22c55e;
+        --accent-dark: #16a34a;
       }
 
       * {
@@ -28,10 +28,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+        background: radial-gradient(circle at top, rgba(255, 255, 255, 0.14), transparent 55%),
+          linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         color: var(--fg);
-        padding: 40px 16px;
+        padding: 48px 16px;
       }
 
       main {
@@ -43,9 +44,9 @@
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: 24px;
-        padding: 40px 32px;
+        padding: 42px 32px;
         box-shadow: var(--shadow);
-        backdrop-filter: blur(18px);
+        backdrop-filter: blur(14px);
       }
 
       .brand {
@@ -53,20 +54,21 @@
         align-items: center;
         justify-content: center;
         gap: 14px;
-        margin-bottom: 18px;
+        margin-bottom: 20px;
       }
 
       .brand img {
         width: 52px;
         height: 52px;
         border-radius: 14px;
-        box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18);
+        box-shadow: 0 14px 30px rgba(34, 197, 94, 0.28);
       }
 
       .brand span {
         font-size: clamp(26px, 4vw, 32px);
         font-weight: 700;
         letter-spacing: -0.01em;
+        color: var(--fg);
       }
 
       h1 {
@@ -77,7 +79,7 @@
       }
 
       .lead {
-        margin: 16px 0 24px;
+        margin: 16px 0 28px;
         text-align: center;
         color: var(--fg-muted);
         line-height: 1.6;
@@ -86,7 +88,6 @@
       .actions {
         display: flex;
         flex-direction: column;
-        gap: 12px;
         align-items: stretch;
       }
 
@@ -94,7 +95,6 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
         border-radius: 14px;
         padding: 14px 18px;
         font-size: 15px;
@@ -102,38 +102,28 @@
         text-decoration: none;
         cursor: pointer;
         border: 1px solid transparent;
-        transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, color 160ms ease;
+        transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
       }
 
       .button.primary {
-        background: var(--primary);
-        color: #ffffff;
-        box-shadow: 0 12px 34px rgba(37, 99, 235, 0.35);
+        background: var(--accent);
+        color: #0b1c13;
+        box-shadow: 0 16px 38px rgba(34, 197, 94, 0.35);
       }
 
       .button.primary:hover {
-        background: var(--primary-hover);
+        background: var(--accent-dark);
         transform: translateY(-1px);
-      }
-
-      .button.secondary {
-        background: rgba(37, 99, 235, 0.08);
-        color: var(--primary);
-        border-color: rgba(37, 99, 235, 0.2);
-      }
-
-      .button.secondary:hover {
-        background: rgba(37, 99, 235, 0.14);
       }
 
       .fallback {
         margin-top: 32px;
         padding-top: 24px;
-        border-top: 1px solid rgba(15, 23, 42, 0.15);
+        border-top: 1px solid rgba(15, 23, 42, 0.16);
       }
 
       .fallback p {
-        margin: 0 0 18px;
+        margin: 0 0 20px;
         color: var(--fg-muted);
         line-height: 1.6;
         text-align: center;
@@ -142,18 +132,27 @@
       .store-links {
         display: grid;
         gap: 12px;
-        margin-bottom: 12px;
+      }
+
+      .store-links .button {
+        background: rgba(34, 197, 94, 0.1);
+        color: var(--accent-dark);
+        border-color: rgba(34, 197, 94, 0.24);
+      }
+
+      .store-links .button:hover {
+        background: rgba(34, 197, 94, 0.16);
       }
 
       .footnote {
         margin-top: 18px;
-        color: rgba(15, 23, 42, 0.55);
+        color: rgba(241, 245, 249, 0.78);
         font-size: 13px;
         text-align: center;
       }
 
       .footnote a {
-        color: var(--primary);
+        color: #bbf7d0;
         text-decoration: none;
         font-weight: 600;
       }
@@ -181,14 +180,13 @@
 
         <div class="actions">
           <a id="open-app" class="button primary" href="#">Open in the app</a>
-          <button id="copy-link" class="button secondary" type="button">Copy invite link</button>
         </div>
 
         <div id="fallback" class="fallback" hidden>
           <p>Nothing happened? Install Mandarin below, then return to this link and we'll take you straight to the group.</p>
           <div class="store-links">
-            <a class="button secondary" href="https://apps.apple.com/app/mandarin-expense-splitter/id1234567890" target="_blank" rel="noreferrer">Download for iOS</a>
-            <a class="button secondary" href="https://play.google.com/store/apps/details?id=com.mandarin.app" target="_blank" rel="noreferrer">Download for Android</a>
+            <a class="button" href="https://apps.apple.com/app/mandarin-expense-splitter/id1234567890" target="_blank" rel="noreferrer">Download for iOS</a>
+            <a class="button" href="https://play.google.com/store/apps/details?id=com.mandarin.app" target="_blank" rel="noreferrer">Download for Android</a>
           </div>
         </div>
       </section>
@@ -199,17 +197,15 @@
       const subtitle = document.getElementById('subtitle');
       const fallback = document.getElementById('fallback');
       const openAppButton = document.getElementById('open-app');
-      const copyButton = document.getElementById('copy-link');
 
       const pathParts = window.location.pathname.split('/').filter(Boolean);
       const lastSegment = pathParts[pathParts.length - 1];
       const tripId = lastSegment && lastSegment !== 'join' ? lastSegment : '';
 
-      const inviteUrl = window.location.href;
       let fallbackTimer;
 
       if (tripId) {
-        const deepLink = `mandarinapp://join-trip?tripId=${encodeURIComponent(tripId)}`;
+        const deepLink = mandarinapp://join-trip?tripId=;
         openAppButton.href = deepLink;
         openAppButton.addEventListener('click', (event) => {
           event.preventDefault();
@@ -229,28 +225,9 @@
         window.location.href = deepLink;
       } else {
         openAppButton.remove();
-        copyButton.remove();
         subtitle.textContent = 'This invite link looks incomplete. Ask the trip organizer to share it again or open Mandarin and join from the Trips tab.';
         fallback.hidden = false;
-      }
-
-      if (copyButton) {
-        copyButton.addEventListener('click', async () => {
-          try {
-            await navigator.clipboard.writeText(inviteUrl);
-            copyButton.textContent = 'Link copied';
-            window.setTimeout(() => {
-              copyButton.textContent = 'Copy invite link';
-            }, 2000);
-          } catch (error) {
-            copyButton.textContent = 'Copy failed';
-            window.setTimeout(() => {
-              copyButton.textContent = 'Copy invite link';
-            }, 2000);
-          }
-        });
       }
     </script>
   </body>
 </html>
-
