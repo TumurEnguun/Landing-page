@@ -205,7 +205,7 @@
       let fallbackTimer;
 
       if (tripId) {
-        const deepLink = mandarinapp://join-trip?tripId=;
+        const deepLink = 'mandarinapp://join-trip?tripId=${tripId}'
         openAppButton.href = deepLink;
         openAppButton.addEventListener('click', (event) => {
           event.preventDefault();
