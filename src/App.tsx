@@ -178,7 +178,7 @@ function App() {
                 <img
                   src="/orange2.png"
                   alt="Orange background 2"
-                  className="absolute right-0 top-[70%] w-[260px] max-w-[26vw] blur-[1px] saturate-125 opacity-0 fade-in-bg z-0"
+                  className="absolute right-[-20px] top-[78%] w-[260px] max-w-[26vw] blur-[1px] saturate-125 opacity-0 fade-in-bg z-0"
                 />
                 {/* Foreground rotating orange */}
                 <div className="relative z-10 slide-up">
@@ -569,4 +569,5 @@ function App() {
 }
 
 export default App;
+
 
