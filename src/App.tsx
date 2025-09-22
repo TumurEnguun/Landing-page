@@ -65,7 +65,7 @@ function App() {
   }, []);
 
   return (
-    <div id="home" className="min-h-screen bg-[#0C090A] text-white">
+    <div id="home" className="min-h-screen bg-black text-white">
       {/* Floating Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
@@ -84,9 +84,9 @@ function App() {
               <img 
                 src="/logo_black.png" 
                 alt="Mandarin Logo" 
-                className="w-8 h-8"
+                className="w-10 h-10"
               />
-              <span className="ml-3 text-xl font-bold text-white">
+              <span className="ml-0 text-2xl font-bold text-white">
                 Mandarin
               </span>
             </a>
@@ -121,29 +121,19 @@ function App() {
       </nav>
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden pt-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-800/20 to-gray-900/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-14">
-          <div className="stagger text-center md:text-left md:max-w-2xl">
+      <div className="relative overflow-hidden min-h-screen pt-32 pb-24 flex flex-col justify-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-0 translate-y-[-40px]">
+          <div className="stagger relative z-20 text-center mx-auto max-w-3xl pb-8 mt-6">
             <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight relative z-30">
-              <span className="block">Make memories,</span>
-              <span className="block">not math.</span>
+              <span className="block">The effortless way to</span>
+              <span className="block">split expenses.</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 mb-6 max-w-3xl mx-auto md:mx-0 leading-relaxed md:text-left relative z-30">
+            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed relative z-20">
               Split group expenses instantly. Track who owes what. Get your money back without the awkward conversations.
             </p>
             
-            {/* Mobile: show only the central mandarin between text and CTA */}
-            <div className="md:hidden relative my-3 h-[13.5rem] flex items-center justify-center">
-              <img
-                src="/mandarin.png"
-                alt="Mandarin"
-                className="relative z-20 w-[13.5rem] h-[13.5rem] drop-shadow-2xl animate-[spin_20s_linear_infinite]"
-              />
-            </div>
 
-            {/* Desktop CTA (unchanged), hidden on mobile */}
-            <div className="stagger hidden md:flex flex-col sm:flex-row gap-4 justify-center md:justify-start items-center mb-10">
+            <div className="stagger flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
               <button className="bg-green-400 text-[#0C090A] hover:bg-green-300 px-6 py-3 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_0_18px_rgba(74,222,128,0.35)] hover:shadow-[0_0_28px_rgba(74,222,128,0.5)] focus:outline-none focus:ring-2 focus:ring-green-300/50 flex items-center">
                 Download for free
               </button>
@@ -153,74 +143,14 @@ function App() {
               </div>
             </div>
 
-            {/* Mobile CTA below oranges */}
-            <div className="stagger flex md:hidden flex-col gap-3 justify-center items-center mb-6">
-              <button className="bg-green-400 text-[#0C090A] hover:bg-green-300 px-6 py-3 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_0_18px_rgba(74,222,128,0.35)] hover:shadow-[0_0_28px_rgba(74,222,128,0.5)] focus:outline-none focus:ring-2 focus:ring-green-300/50 flex items-center">
-                Download for free
-              </button>
-              <div className="flex items-center text-gray-400">
-                <CheckCircle className="w-5 h-5 mr-2 text-green-400" />
-                100% Free. No catches.
-              </div>
-            </div>
-            
-            
-            {/* Right-side rotating image for md+ with background reveal */}
-            <div className="hidden md:flex absolute inset-y-0 right-0 items-center pointer-events-none">
-              <div className="relative mr-4">
-                {/* Background photo that fades in behind the rotating orange */}
-                <img
-                  src="/orange-bg.png"
-                  alt="Orange background"
-                  className="absolute left-0 top-[14%] w-[240px] max-w-[22.4vw] blur-[1px] saturate-125 opacity-0 fade-in-bg z-0"
-                />
-                {/* Second background image at bottom-right corner */}
-                <img
-                  src="/orange2.png"
-                  alt="Orange background 2"
-                  className="absolute right-[-20px] top-[78%] w-[260px] max-w-[26vw] blur-[1px] saturate-125 opacity-0 fade-in-bg z-0"
-                />
-                {/* Foreground rotating orange */}
-                <div className="relative z-10 slide-up">
-                  <img
-                    src="/mandarin.png"
-                    alt="Mandarin preview"
-                    className="relative w-[500px] max-w-[50vw] bg-transparent drop-shadow-2xl animate-[spin_20s_linear_infinite]"
-                  />
-                </div>
-              </div>
-            </div>
-            
-            <div id="features" className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto" data-reveal-stagger>
-              <div className="bg-gray-800/50 backdrop-blur-sm px-4 py-3 md:px-6 md:py-6 rounded-xl border border-gray-700" data-reveal>
-                <div className="flex items-center md:block">
-                  <Users className="w-7 h-7 text-green-400 mr-3 md:mr-0 md:mb-3" />
-                  <div>
-                    <h3 className="text-base md:text-lg font-semibold m-0">Group Expenses</h3>
-                    <p className="text-gray-400 text-sm md:text-base mt-1">Add friends, split bills, track everything in one place</p>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-800/50 backdrop-blur-sm px-4 py-3 md:px-6 md:py-6 rounded-xl border border-gray-700" data-reveal>
-                <div className="flex items-center md:block">
-                  <Star className="w-7 h-7 text-green-400 mr-3 md:mr-0 md:mb-3" />
-                  <div>
-                    <h3 className="text-base md:text-lg font-semibold m-0">Smart Calculations</h3>
-                    <p className="text-gray-400 text-sm md:text-base mt-1">Smart algorithm for automatic splitting with minimal transactions.</p>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-800/50 backdrop-blur-sm px-4 py-3 md:px-6 md:py-6 rounded-xl border border-gray-700" data-reveal>
-                <div className="flex items-center md:block">
-                  <Shield className="w-7 h-7 text-green-400 mr-3 md:mr-0 md:mb-3" />
-                  <div>
-                    <h3 className="text-base md:text-lg font-semibold m-0">Evidence Tracking</h3>
-                    <p className="text-gray-400 text-sm md:text-base mt-1">Payment history for proof, with receipt photo saving coming soon.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
+        </div>
+        <div className="pointer-events-none absolute inset-x-0 bottom-[-17.5rem] sm:bottom-[-28rem] lg:bottom-[-38rem] flex justify-center">
+          <img
+            src="/mandarin.png"
+            alt="Mandarin preview"
+            className="w-[520px] max-w-[150vw] sm:w-[720px] sm:max-w-[115vw] lg:w-[1050px] lg:max-w-[110vw] drop-shadow-2xl animate-[spin_20s_linear_infinite]"
+          />
         </div>
       </div>
 
@@ -240,7 +170,7 @@ function App() {
             <div className="space-y-8" data-reveal>
               <div className="flex items-start space-x-4">
                 <div className="bg-green-500/20 p-3 rounded-lg">
-                  <AlertTriangle aria-hidden="true" className="w-6 h-6 text-green-400" />
+                  <AlertTriangle aria-hidden="true" className="w-8 h-8 text-green-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">The Awkward Ask</h3>
@@ -252,7 +182,7 @@ function App() {
               
               <div className="flex items-start space-x-4">
                 <div className="bg-green-500/20 p-3 rounded-lg">
-                  <HelpCircle aria-hidden="true" className="w-6 h-6 text-green-400" />
+                  <HelpCircle aria-hidden="true" className="w-8 h-8 text-green-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">The Confusion</h3>
@@ -264,7 +194,7 @@ function App() {
               
               <div className="flex items-start space-x-4">
                 <div className="bg-green-500/20 p-3 rounded-lg">
-                  <PiggyBank aria-hidden="true" className="w-6 h-6 text-green-400" />
+                  <PiggyBank aria-hidden="true" className="w-8 h-8 text-green-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">The Lost Money</h3>
@@ -276,7 +206,7 @@ function App() {
             </div>
             
             <div className="bg-gradient-to-br from-gray-700/20 to-gray-600/20 p-8 rounded-2xl border border-gray-600/30" data-reveal>
-              <h3 className="text-2xl font-bold mb-4 text-center">
+              <h3 className="text-2xl font-bold mb-4 text-left">
                 Mandarin handles it all
               </h3>
               <div className="space-y-4">
@@ -294,11 +224,11 @@ function App() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="w-6 h-6 text-green-400" />
-                  <span>Receipt photo evidence (coming soon)</span>
+                  <span>Gentle payment reminders</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="w-6 h-6 text-green-400" />
-                  <span>Gentle payment reminders</span>
+                  <span>Receipt photo evidence (coming soon)</span>
                 </div>
               </div>
             </div>
@@ -510,51 +440,36 @@ function App() {
             <p className="text-sm md:text-base font-semibold bg-gradient-to-r from-gray-400 to-gray-500 bg-clip-text text-transparent tracking-tight">Stay updated and say hi</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-reveal-stagger>
-            <a href="https://www.tiktok.com/@MandarinPAy" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center">
+            <a href="https://www.tiktok.com/@Mandarinpay" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center">
               <div className="flex justify-center mb-1">
                 <Music2 aria-hidden="true" className="w-6 h-6 text-emerald-300" />
               </div>
               <div className="font-medium">TikTok</div>
-              <div className="text-gray-400 text-xs md:text-sm">@MandarinPAy</div>
+              
             </a>
-            <a href="https://www.instagram.com/mandarin" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center" data-reveal>
+            <a href="https://www.instagram.com/chnguun" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center" data-reveal>
               <div className="flex justify-center mb-1">
                 <Camera aria-hidden="true" className="w-6 h-6 text-pink-300" />
               </div>
               <div className="font-medium">Instagram</div>
-              <div className="text-gray-400 text-xs md:text-sm">@mandarin</div>
+              
             </a>
-            <a href="https://www.facebook.com/mandarin" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center" data-reveal>
+            <a href="https://www.facebook.com/chinguun.ganbaatar" target="_blank" rel="noreferrer" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center" data-reveal>
               <div className="flex justify-center mb-1">
                 <ThumbsUp aria-hidden="true" className="w-6 h-6 text-blue-300" />
               </div>
               <div className="font-medium">Facebook</div>
-              <div className="text-gray-400 text-xs md:text-sm">/mandarin</div>
+              
             </a>
             <a href="mailto:support@mandarin.app" className="group bg-gray-800/40 hover:bg-gray-800/60 px-5 py-4 rounded-lg border border-gray-700/70 hover:border-gray-500/60 transition-colors text-center" data-reveal>
               <div className="flex justify-center mb-1">
                 <Mail aria-hidden="true" className="w-6 h-6 text-amber-300" />
               </div>
               <div className="font-medium">Email</div>
-              <div className="text-gray-400 text-xs md:text-sm">support@mandarin.app</div>
+              
             </a>
           </div>
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3" data-reveal>
-            <a href="https://apps.apple.com/" aria-label="Download on the App Store" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-xl bg-black text-white hover:bg-black/90 px-4 py-2 h-12">
-              <Apple className="w-6 h-6" />
-              <div className="flex flex-col leading-none text-left">
-                <span className="text-[10px] uppercase tracking-wide">Download on the</span>
-                <span className="text-base font-semibold -mt-0.5">App Store</span>
-              </div>
-            </a>
-            <a href="https://play.google.com/store" aria-label="Get it on Google Play" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-xl bg-black text-white hover:bg-black/90 px-4 py-2 h-12">
-              <Play className="w-6 h-6" />
-              <div className="flex flex-col leading-none text-left">
-                <span className="text-[10px] uppercase tracking-wide">Get it on</span>
-                <span className="text-base font-semibold -mt-0.5">Google Play</span>
-              </div>
-            </a>
-          </div>
+
         </div>
       </div>
 
@@ -562,12 +477,70 @@ function App() {
 
       {/* Footer (minimal, no logo/brand) */}
       <div className="py-8 border-t border-gray-800 text-center text-gray-400">
-        (c) 2025 Mandarin
+        &copy; 2025 Mandarin. All rights reserved.
       </div>
     </div>
   );
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
