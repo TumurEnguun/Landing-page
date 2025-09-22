@@ -168,7 +168,7 @@ function App() {
 
       {/* Hero Section */}
       <div className="relative overflow-hidden min-h-screen pt-32 pb-24 flex flex-col justify-center">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-0 translate-y-[-40px]">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-0 translate-y-[-40px] lg:translate-y-[-50px]">
           <div className="stagger relative z-20 text-center mx-auto max-w-3xl pb-8 mt-6">
             <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight relative z-30">
               <span className="block">The effortless way to</span>
@@ -555,6 +555,7 @@ function App() {
 }
 
 export default App;
+
 
 
 
