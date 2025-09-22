@@ -19,10 +19,14 @@ import {
   ThumbsUp,
   Mail,
 } from 'lucide-react';
+import { supabase } from './lib/supabaseClient';
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [notifyEmail, setNotifyEmail] = useState('');
+  const [notifyStatus, setNotifyStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [notifyError, setNotifyError] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,7 +67,49 @@ function App() {
     document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
+  const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 
+  const handleNotifySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const email = notifyEmail.trim();
+
+    if (!validateEmail(email)) {
+      setNotifyStatus('error');
+      setNotifyError("Please enter a valid email address.");
+      return;
+    }
+
+    setNotifyStatus('loading');
+
+    try {
+      const { error } = await supabase.from('waitlist').insert({ email });
+
+      if (error) {
+        if ('code' in error && error.code === '23505') {
+          setNotifyStatus('success');
+          setNotifyError('');
+          setNotifyEmail('');
+          return;
+        }
+        throw error;
+      }
+
+      setNotifyStatus('success');
+      setNotifyError('');
+      setNotifyEmail('');
+    } catch (error) {
+      console.error('Failed to store email', error);
+      setNotifyStatus('error');
+
+      const message =
+        typeof error === 'object' && error !== null && 'message' in error &&
+        typeof (error as { message?: unknown }).message === 'string'
+          ? (error as { message: string }).message
+          : 'Something went wrong. Please try again later.';
+
+      setNotifyError(message);
+    }
+  };
   return (
     <div id="home" className="min-h-screen bg-black text-white">
       {/* Floating Navigation */}
@@ -133,14 +179,39 @@ function App() {
             </p>
             
 
-            <div className="stagger flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
-              <button className="bg-green-400 text-[#0C090A] hover:bg-green-300 px-6 py-3 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_0_18px_rgba(74,222,128,0.35)] hover:shadow-[0_0_28px_rgba(74,222,128,0.5)] focus:outline-none focus:ring-2 focus:ring-green-300/50 flex items-center">
-                Download for free
+            <form
+              onSubmit={handleNotifySubmit}
+              className="stagger flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-6 w-full max-w-2xl mx-auto"
+            >
+              <label htmlFor="notify-email" className="sr-only">Email address</label>
+              <input
+                id="notify-email"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                value={notifyEmail}
+                onChange={(event) => {
+                  setNotifyEmail(event.target.value);
+                  if (notifyStatus !== 'idle') setNotifyStatus('idle');
+                  if (notifyError) setNotifyError('');
+                }}
+                className="w-full sm:w-[280px] rounded-full bg-gray-900/60 border border-gray-700/70 text-white placeholder-gray-500 px-5 py-3 focus:outline-none focus:ring-2 focus:ring-green-300/50 focus:border-transparent"
+              />
+              <button
+                type="submit"
+                disabled={notifyStatus === 'loading'}
+                className="inline-flex items-center justify-center rounded-full bg-green-400 text-[#0C090A] font-semibold text-lg px-6 py-3 transition-all duration-300 hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300/50 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_0_18px_rgba(74,222,128,0.35)] hover:shadow-[0_0_28px_rgba(74,222,128,0.5)]"
+              >
+                {notifyStatus === 'loading' ? 'Joining...' : 'Notify me'}
               </button>
-              <div className="flex items-center text-gray-400">
-                <CheckCircle className="w-5 h-5 mr-2 text-green-400" />
-                100% Free. No catches.
-              </div>
+            </form>
+            <div className="text-sm text-center text-gray-400 mb-10">
+              {notifyStatus === 'success'
+                ? "Thanks! You're on the list. We'll email you when Mandarin launches."
+                : notifyStatus === 'error'
+                ? notifyError || 'Something went wrong. Please try again.'
+                : "Join the waitlist and we'll email you the moment Mandarin goes live."}
             </div>
 
           </div>
@@ -484,61 +555,6 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
