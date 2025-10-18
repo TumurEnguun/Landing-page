@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import {
   Star,
   CheckCircle,
@@ -15,8 +15,8 @@ import {
   ThumbsUp,
   Mail,
   Globe,
+  ExternalLink,
 } from 'lucide-react';
-import { supabase } from './lib/supabaseClient';
 
 const translations = {
   en: {
@@ -234,25 +234,137 @@ const translations = {
       suffix: 'Бүх эрх хуулиар хамгаалагдсан.',
     },
   },
+  ja: {
+    nav: {
+      goHomeAria: 'ホームに戻る',
+      logoAlt: 'Mandarinロゴ',
+      privacy: 'プライバシー',
+      terms: '利用規約',
+      support: 'サポート',
+      langSwitcher: {
+        aria: '言語を切り替え',
+        title: '日本語',
+      },
+    },
+    hero: {
+      headingLine1: '簡単に',
+      headingLine2: '費用を分割。',
+      description:
+        'グループの費用を瞬時に分割。誰がいくら支払うべきかを追跡。気まずい会話なしでお金を取り戻しましょう。',
+      emailLabel: 'メールアドレス',
+      emailPlaceholder: 'you@example.com',
+      submitIdle: 'ダウンロード',
+      submitLoading: 'ダウンロード中...',
+      waitlistSuccess: 'ありがとうございます！リストに登録されました。Mandarinがリリースされたらメールをお送りします。',
+      waitlistErrorInline: 'エラーが発生しました。もう一度お試しください。',
+      waitlistIdle: 'ウェイトリストに参加して、Mandarinが正式に開始したらすぐにメールでお知らせします。',
+      waitlistErrorLater: 'エラーが発生しました。後でもう一度お試しください。',
+      heroAlt: 'Mandarinプレビュー',
+    },
+    validation: {
+      invalidEmail: '有効なメールアドレスを入力してください。',
+    },
+    problem: {
+      title: 'お金を返してもらうのが恥ずかしいですか？',
+      description: '明確な証拠とともに代わりに処理します。誰が何を支払うべきかについての気まずい会話はもうありません。',
+      awkwardAsk: {
+        title: '気まずいお願い',
+        description: '「あの...先週のディナー覚えてる？47.50ドル返してくれる？」',
+      },
+      confusion: {
+        title: '混乱',
+        description: '「待って、もう返したんじゃなかった？いつだっけ？」',
+      },
+      lostMoney: {
+        title: '失われたお金',
+        description: '「まあ、簡単だから」と思って結局自分で負担することになる',
+      },
+      solutionTitle: 'Mandarinがすべてを処理',
+      solutionBullets: [
+        '友達と旅行を作成',
+        '自動的な費用分割',
+        '完全な支払い履歴',
+        '優しい支払いリマインダー',
+        '領収書写真の証拠（近日公開）',
+      ],
+    },
+    features: {
+      createTripsTitle: '旅行を作成',
+      createTripsDescription: '友達や大切な人と簡単に旅行を作成。',
+      createTripsAlt: '旅行作成画面',
+      trackExpensesTitle: '費用を追跡',
+      trackExpensesDescription: '旅行の費用を簡単に追加・追跡',
+      trackExpensesAlt: '費用画面',
+    },
+    hiddenBenefits: {
+      title: '100%無料。隠し条件なし。',
+      description: '友達同士のお金のやり取りはシンプルであるべきだと信じています',
+      cards: [
+        {
+          title: 'お金を取り戻す',
+          description: 'グループ費用でお金を失うのをやめましょう。すべてを追跡し、支払いを思い出させます。',
+        },
+        {
+          title: '瞬時分割',
+          description: '領収書の写真を撮る。友達を追加。30秒で完了。',
+        },
+        {
+          title: '気まずい会話なし',
+          description: '証拠として領収書とともにリマインダーを送信。友情を保ちましょう。',
+        },
+      ],
+    },
+    balances: {
+      title: '旅行の残高を確認',
+      description: '参加者それぞれの残高をいつでも簡単に確認し、旅行全体を通じて明確で透明な追跡を確保。',
+      alt: '残高画面',
+      smartTitle: 'スマート返金',
+      smartDescription: '参加者間の取引数を最小化する最も効率的な借金精算方法を自動計算。',
+      smartAlt: '返金画面',
+    },
+    socialProof: {
+      title: '他の人に信頼されています',
+      quotes: [
+        '「ついにルームメイトからベガス旅行の200ドルを取り戻せました。領収書の写真があったので反論できませんでした！」',
+        '「もうスプレッドシートや気まずいメッセージは不要。私たちのグループは今、ディナー、旅行、光熱費などすべてにこれを使っています。」',
+        '「友達グループを多くのドラマから救いました。自動リマインダーは丁寧ですが効果的です。」',
+      ],
+    },
+    social: {
+      title: 'フォローしてください',
+      subtitle: '最新情報を取得して挨拶しましょう',
+    },
+    footer: {
+      suffix: '全著作権所有。',
+    },
+  },
 } as const;
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [notifyEmail, setNotifyEmail] = useState('');
-  const [notifyStatus, setNotifyStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [notifyError, setNotifyError] = useState('');
-  const [notifyErrorKey, setNotifyErrorKey] = useState<'invalidEmail' | 'generic' | null>(null);
-  const [language, setLanguage] = useState<'en' | 'mn'>('en');
+  const [language, setLanguage] = useState<'en' | 'mn' | 'ja'>('mn');
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
   const text = translations[language];
-  const nextLanguage = language === 'en' ? 'mn' : 'en';
-  const resolvedNotifyError =
-    notifyErrorKey === 'invalidEmail'
-      ? text.validation.invalidEmail
-      : notifyErrorKey === 'generic'
-      ? text.hero.waitlistErrorLater
-      : notifyError;
+  const languages = [
+    { code: 'mn', name: 'Монгол хэл', flag: '🇲🇳', url: null },
+    { code: 'en', name: 'English', flag: '🇺🇸', url: 'https://mandarinpay.app/?lang=en' },
+    { code: 'ja', name: '日本語', flag: '🇯🇵', url: 'https://mandarinpay.app/?lang=ja' }
+  ];
+
+  const handleLanguageChange = (langCode: 'en' | 'mn' | 'ja') => {
+    const selectedLanguage = languages.find(lang => lang.code === langCode);
+    
+    if (selectedLanguage?.url) {
+      // Redirect to the language-specific URL
+      window.location.href = selectedLanguage.url;
+    } else {
+      // For Mongolian (default), just change the language state
+      setLanguage(langCode);
+      setIsLanguageDropdownOpen(false);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -298,59 +410,31 @@ function App() {
       document.documentElement.lang = language;
     }
   }, [language]);
-  const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 
-  const handleNotifySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const email = notifyEmail.trim();
-
-    if (!validateEmail(email)) {
-      setNotifyStatus('error');
-      setNotifyErrorKey('invalidEmail');
-      setNotifyError('');
-      return;
+  // Check for language parameter in URL on page load
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const langParam = urlParams.get('lang');
+    
+    if (langParam && ['en', 'mn', 'ja'].includes(langParam)) {
+      setLanguage(langParam as 'en' | 'mn' | 'ja');
     }
+  }, []);
 
-    setNotifyStatus('loading');
-    setNotifyErrorKey(null);
-    setNotifyError('');
-
-    try {
-      const { error } = await supabase.from('waitlist').insert({ email });
-
-      if (error) {
-        if ('code' in error && error.code === '23505') {
-          setNotifyStatus('success');
-          setNotifyError('');
-          setNotifyErrorKey(null);
-          setNotifyEmail('');
-          return;
+  // Close language dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isLanguageDropdownOpen) {
+        const target = event.target as Element;
+        if (!target.closest('.language-dropdown')) {
+          setIsLanguageDropdownOpen(false);
         }
-        throw error;
       }
+    };
 
-      setNotifyStatus('success');
-      setNotifyError('');
-      setNotifyErrorKey(null);
-      setNotifyEmail('');
-    } catch (error) {
-      console.error('Failed to store email', error);
-      setNotifyStatus('error');
-
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'message' in error &&
-        typeof (error as { message?: unknown }).message === 'string'
-      ) {
-        setNotifyError((error as { message: string }).message);
-        setNotifyErrorKey(null);
-      } else {
-        setNotifyError('');
-        setNotifyErrorKey('generic');
-      }
-    }
-  };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isLanguageDropdownOpen]);
   return (
     <div id="home" className="min-h-screen bg-black text-white">
       {/* Floating Navigation */}
@@ -384,16 +468,38 @@ function App() {
             
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center stagger divide-x divide-gray-700/50">
-              <button
-                type="button"
-                onClick={() => setLanguage(nextLanguage)}
-                className="flex items-center justify-center px-4 text-gray-300 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black first:pl-0"
-                aria-label={text.nav.langSwitcher.aria}
-                title={text.nav.langSwitcher.title}
-              >
-                <Globe className="w-4 h-4" aria-hidden="true" />
-                <span className="sr-only">{text.nav.langSwitcher.title}</span>
-              </button>
+              <div className="relative language-dropdown">
+                <button
+                  type="button"
+                  onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+                  className="flex items-center justify-center px-4 text-gray-300 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black first:pl-0"
+                  aria-label={text.nav.langSwitcher.aria}
+                  title={text.nav.langSwitcher.title}
+                >
+                  <Globe className="w-4 h-4 mr-2" aria-hidden="true" />
+                  <span className="text-sm">{languages.find(lang => lang.code === language)?.flag}</span>
+                </button>
+                
+                {isLanguageDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-gray-800/95 backdrop-blur-sm rounded-lg border border-gray-700/50 shadow-lg z-50">
+                    <div className="py-2">
+                      {languages.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => handleLanguageChange(lang.code as 'en' | 'mn' | 'ja')}
+                          className={`w-full flex items-center px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors ${
+                            language === lang.code ? 'text-green-400' : 'text-gray-300'
+                          }`}
+                        >
+                          <span className="mr-3">{lang.flag}</span>
+                          <span className="flex-1 text-left">{lang.name}</span>
+                          {lang.url && <ExternalLink className="w-3 h-3 ml-2 opacity-60" />}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
               <a href="/privacy.html" className="text-gray-300 hover:text-white transition-colors px-4">
                 {text.nav.privacy}
               </a>
@@ -418,18 +524,32 @@ function App() {
           {isMobileMenuOpen && (
             <div className="md:hidden mt-4 bg-black/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/60 shadow-lg">
               <div className="flex flex-col divide-y divide-gray-700/50">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLanguage(nextLanguage);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors py-3 text-left focus:outline-none"
-                  aria-label={text.nav.langSwitcher.aria}
-                >
-                  <Globe className="w-5 h-5" aria-hidden="true" />
-                  <span>{text.nav.langSwitcher.title}</span>
-                </button>
+                <div className="py-3">
+                  <div className="flex items-center gap-3 text-gray-300 mb-2">
+                    <Globe className="w-5 h-5" aria-hidden="true" />
+                    <span>Language / Хэл / 言語</span>
+                  </div>
+                  <div className="grid grid-cols-1 gap-2 ml-8">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          handleLanguageChange(lang.code as 'en' | 'mn' | 'ja');
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className={`flex items-center gap-2 text-sm py-2 px-3 rounded-lg transition-colors text-left ${
+                          language === lang.code 
+                            ? 'bg-green-500/20 text-green-400' 
+                            : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+                        }`}
+                      >
+                        <span>{lang.flag}</span>
+                        <span className="flex-1">{lang.name}</span>
+                        {lang.url && <ExternalLink className="w-3 h-3 opacity-60" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <a href="/privacy.html" className="text-gray-300 hover:text-white transition-colors py-3">
                   {text.nav.privacy}
                 </a>
@@ -458,40 +578,17 @@ function App() {
             </p>
             
 
-            <form
-              onSubmit={handleNotifySubmit}
-              className="stagger flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-6 w-full max-w-2xl mx-auto"
-            >
-              <label htmlFor="notify-email" className="sr-only">{text.hero.emailLabel}</label>
-              <input
-                id="notify-email"
-                type="email"
-                inputMode="email"
-                autoComplete="email"
-                placeholder={text.hero.emailPlaceholder}
-                value={notifyEmail}
-                onChange={(event) => {
-                  setNotifyEmail(event.target.value);
-                  if (notifyStatus !== 'idle') setNotifyStatus('idle');
-                  if (notifyError) setNotifyError('');
-                  if (notifyErrorKey) setNotifyErrorKey(null);
-                }}
-                className="w-full sm:w-[280px] rounded-full bg-gray-900/60 border border-gray-700/70 text-white placeholder-gray-500 px-5 py-3 focus:outline-none focus:ring-2 focus:ring-green-300/50 focus:border-transparent"
-              />
+            <div className="stagger flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-6 w-full max-w-2xl mx-auto">
               <button
-                type="submit"
-                disabled={notifyStatus === 'loading'}
-                className="inline-flex items-center justify-center rounded-full bg-green-400 text-[#0C090A] font-semibold text-lg px-6 py-3 transition-all duration-300 hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300/50 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_0_18px_rgba(74,222,128,0.35)] hover:shadow-[0_0_28px_rgba(74,222,128,0.5)]"
+                type="button"
+                className="inline-flex items-center justify-center rounded-full bg-green-400 text-[#0C090A] font-semibold text-lg px-6 py-3 transition-all duration-300 hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300/50 shadow-[0_0_18px_rgba(74,222,128,0.35)] hover:shadow-[0_0_28px_rgba(74,222,128,0.5)]"
               >
-                {notifyStatus === 'loading' ? text.hero.submitLoading : text.hero.submitIdle}
+                {text.hero.submitIdle}
               </button>
-            </form>
-            <div className="text-sm text-center text-gray-400 mb-10">
-              {notifyStatus === 'success'
-                ? text.hero.waitlistSuccess
-                : notifyStatus === 'error'
-                ? resolvedNotifyError || text.hero.waitlistErrorInline
-                : text.hero.waitlistIdle}
+              <div className="flex items-center justify-center sm:justify-start text-green-400">
+                <CheckCircle className="w-5 h-5 mr-2" />
+                <span className="text-sm font-medium">{text.hiddenBenefits.title}</span>
+              </div>
             </div>
 
           </div>
