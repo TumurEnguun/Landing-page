@@ -221,9 +221,9 @@ const translations = {
     socialProof: {
       title: 'Бусдын итгэлийг хүлээсэн',
       quotes: [
-        '"Өрөөнийхнөөсөө Вегасын аяллын 200 долларыг эцэст нь буцааж авч чадлаа. Баримтын зурагтай болохоор маргах ч аргагүй!"',
-        '"Цаашид хүснэгт, эвгүй мессеж хэрэггүй. Манай бүлэг одоо оройн зоог, аялал, төлбөр бүрийг эндээс зохицуулдаг."',
-        '"Найзуудын бүлгийг олон маргаанаас аварчихлаа. Автоматаар ирдэг сануулгууд зөөлөн мөртлөө маш үр дүнтэй."',
+        '"Өрөөнийхнөөсөө Вегасын аяллын 200 долларыг эцэст нь буцааж авч чадлаа."',
+        '"Цаашид хүснэгт, тооны машин хэрэггүй болжээ. Манай найзууд бүгд одоо оройн зоог, аялал, төлбөр бүрийг Мандарин апп-аар зохицуулдаг болсон."',
+        '"Найзуудын хоорондох мөнгөний маргаанаас ашгүй гэж саллаа. Автоматаар бүх тооцоог боддог болхоор амар юм."',
       ],
     },
     social: {
@@ -506,13 +506,13 @@ function App() {
                   </div>
                 )}
               </div>
-              <a href="/privacy.html" className="text-gray-300 hover:text-white transition-colors px-4">
+              <a href={language === 'mn' ? "/privacy-mn.html" : "/privacy.html"} className="text-gray-300 hover:text-white transition-colors px-4">
                 {text.nav.privacy}
               </a>
-              <a href="/terms.html" className="text-gray-300 hover:text-white transition-colors px-4">
+              <a href={language === 'mn' ? "/terms-mn.html" : "/terms.html"} className="text-gray-300 hover:text-white transition-colors px-4">
                 {text.nav.terms}
               </a>
-              <a href="/support.html" className="text-gray-300 hover:text-white transition-colors px-4 last:pr-0">
+              <a href={language === 'mn' ? "/support-mn.html" : "/support.html"} className="text-gray-300 hover:text-white transition-colors px-4 last:pr-0">
                 {text.nav.support}
               </a>
             </div>
@@ -556,13 +556,13 @@ function App() {
                     ))}
                   </div>
                 </div>
-                <a href="/privacy.html" className="text-gray-300 hover:text-white transition-colors py-3">
+                <a href={language === 'mn' ? "/privacy-mn.html" : "/privacy.html"} className="text-gray-300 hover:text-white transition-colors py-3">
                   {text.nav.privacy}
                 </a>
-                <a href="/terms.html" className="text-gray-300 hover:text-white transition-colors py-3">
+                <a href={language === 'mn' ? "/terms-mn.html" : "/terms.html"} className="text-gray-300 hover:text-white transition-colors py-3">
                   {text.nav.terms}
                 </a>
-                <a href="/support.html" className="text-gray-300 hover:text-white transition-colors py-3">
+                <a href={language === 'mn' ? "/support-mn.html" : "/support.html"} className="text-gray-300 hover:text-white transition-colors py-3">
                   {text.nav.support}
                 </a>
               </div>
