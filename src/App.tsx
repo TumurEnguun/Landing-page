@@ -447,10 +447,10 @@ function App() {
       </nav>
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden min-h-screen pt-32 pb-24 flex flex-col justify-center">
+      <div className="relative overflow-hidden min-h-screen pt-32 pb-32 flex flex-col justify-center">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-0 translate-y-[-40px] lg:translate-y-[-50px]">
-          <div className="stagger relative z-20 text-center mx-auto max-w-3xl pb-8 mt-6">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight relative z-30">
+          <div className="stagger relative z-40 text-center mx-auto max-w-3xl pb-8 mt-6">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight relative z-50">
               <span className="block relative">
                 {text.hero.headingLine1}
                 {(!text.hero.headingLine2 || text.hero.headingLine2 === '') && (
@@ -469,7 +469,7 @@ function App() {
             </p>
             
 
-            <div className="stagger flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-6 w-full max-w-2xl mx-auto">
+            <div className="stagger flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-6 w-full max-w-2xl mx-auto relative z-50">
               <button
                 type="button"
                 className="inline-flex items-center justify-center rounded-full bg-green-400 text-[#0C090A] font-semibold text-lg px-6 py-3 transition-all duration-300 hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300/50 shadow-[0_0_18px_rgba(74,222,128,0.35)] hover:shadow-[0_0_28px_rgba(74,222,128,0.5)]"
@@ -484,7 +484,7 @@ function App() {
 
           </div>
         </div>
-        <div className="pointer-events-none absolute inset-x-0 bottom-[-17.5rem] sm:bottom-[-28rem] lg:bottom-[-38rem] flex justify-center">
+        <div className="pointer-events-none absolute inset-x-0 bottom-[-20rem] sm:bottom-[-30rem] lg:bottom-[-40rem] flex justify-center z-10">
           <img
             src="/mandarin.png"
             alt={text.hero.heroAlt}
