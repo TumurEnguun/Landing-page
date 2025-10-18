@@ -38,7 +38,7 @@ const translations = {
         'Split group expenses instantly. Track who owes what. Get your money back without the awkward conversations.',
       emailLabel: 'Email address',
       emailPlaceholder: 'you@example.com',
-      submitIdle: 'Notify me',
+      submitIdle: 'Download Now',
       submitLoading: 'Joining...',
       waitlistSuccess: "Thanks! You're on the list. We'll email you when Mandarin launches.",
       waitlistErrorInline: 'Something went wrong. Please try again.',
@@ -138,13 +138,13 @@ const translations = {
       },
     },
     hero: {
-      headingLine1: 'Зардлаа төвөггүйгээр',
-      headingLine2: 'хуваагаарай.',
+      headingLine1: 'Зардлыг задалъя',
+      headingLine2: '',
       description:
-        'Бүлгийн зардлыг дорхноо бодоорой. Хэн хэдийг өгөх ёстойг хялбархан хөтөл. Дургүй хүрэм яриа өрнүүлэхгүйгээр мөнгөө буцаан аваарай.',
+        'Төлбөрийн тооцоог хялбар, ухаалгаар шийдье',
       emailLabel: 'Имэйл хаяг',
       emailPlaceholder: 'ta@example.com',
-      submitIdle: 'Мэдээлэл авах',
+      submitIdle: 'Одоо татах',
       submitLoading: 'Нэгдэж байна...',
       waitlistSuccess: 'Баярлалаа! Таныг жагсаалтад бүртгэлээ. Mandarin нээгдэхэд бид имэйл илгээнэ.',
       waitlistErrorInline: 'Алдаа гарлаа. Дахин оролдоно уу.',
@@ -157,41 +157,41 @@ const translations = {
       invalidEmail: 'Хүчинтэй имэйл хаяг оруулна уу.',
     },
     problem: {
-      title: 'Мөнгөө эргүүлж нэхэхээс ичээд байна уу?',
+      title: 'Өөрөөсөө гаргасан мөнгөө эргүүлж нэхэхээс ичээд байна уу?',
       description:
-        'Бид нотолгоотойгоор таны өмнөөс зохицуулна. Хэн хэндээ юу төлөх ёстой талаар эвгүй яриа дахин өрнөхгүй.',
+        'Бид таны аяллалын бүх тооцоог ухаалгаар бодож, таны өмнөөс нэхэмжлэг явуулна.',
       awkwardAsk: {
-        title: 'Эвгүй хүсэлт',
+        title: 'Асуухад эвгүй асуултууд',
         description:
-          '“Өө... өнгөрсөн долоо хоногийн оройн хоол санаанд байна уу? Чи надад 47.50 доллар өгөх ёстой...”',
+          '"Нээрээ чи надад 15000₮-ний өртэй биз дээ? Өнгөрсөн долоо хоногийн бямба гарагийн оройн хоолыг би даасан санаж байна уу ?"',
       },
       confusion: {
-        title: 'Будлиан',
-        description: '“Байз, би аль хэдийн төлчихсөн биш билүү? Хэзээ билээ?”',
+        title: 'Үл ойлголцол',
+        description: '"Юу яриад байгаа юм бэ ? Би аль дээр өгөө биз дээ ?"',
       },
       lostMoney: {
-        title: 'Алдагдсан мөнгө',
-        description: '“Зүгээр л амархан” гэж бодоод эцэст нь бүх зардлыг өөрөө нуруундаа үүрдэг.',
+        title: 'Гэмгүй мөнгөө алдах',
+        description: '"За найзууд юм чинь яах вэ дээ" гэж бодоод эцэст нь бүх зардлыг өөрөө нуруундаа үүрдэг.',
       },
-      solutionTitle: 'Mandarin бүгдийг нь зохицуулна',
+      solutionTitle: 'Mandarin апп нь бүгдийг ухаалгаар зохицуулна',
       solutionBullets: [
-        'Найзуудтайгаа аялал үүсгэ',
-        'Зардлыг автоматаар хуваарилна',
+        'Хамт олонтойгоо грүүп/аялал үүсгэх',
+        'Зардлыг автоматаар хуваарилах',
         'Төлбөрийн түүхийг бүтнээр нь хадгална',
         'Төлбөрөө сануулах уян хатан мэдэгдэл',
-        'Баримтын зургийг нотолгоо болгон хадгална (удахгүй)',
+        'Баримтын зургийг хадгална (тун удахгүй)',
       ],
     },
     features: {
-      createTripsTitle: 'Аялал үүсгэ',
-      createTripsDescription: 'Найз нөхөд, хайртай хүмүүстэйгээ аялал төлөвлөж хялбархан үүсгэ.',
+      createTripsTitle: 'Аяллаа төлөвлө',
+      createTripsDescription: 'Найз нөхөд, хайртай хүмүүстэйгээ аялал төлөвлөж хялбархан үүсгээрэй.',
       createTripsAlt: 'Аялал үүсгэсэн дэлгэц',
       trackExpensesTitle: 'Зардлаа хөтөл',
       trackExpensesDescription: 'Аяллын зардлаа амархан нэмээд хөтлөөрэй.',
       trackExpensesAlt: 'Зардлын дэлгэц',
     },
     hiddenBenefits: {
-      title: '100% Үнэгүй. Нууц нөхцөлгүй.',
+      title: '100% Үнэгүй.',
       description: 'Найзуудын хоорондын мөнгөний тооцоо энгийн байх ёстой гэж бид итгэдэг.',
       cards: [
         {
@@ -253,7 +253,7 @@ const translations = {
         'グループの費用を瞬時に分割。誰がいくら支払うべきかを追跡。気まずい会話なしでお金を取り戻しましょう。',
       emailLabel: 'メールアドレス',
       emailPlaceholder: 'you@example.com',
-      submitIdle: 'ダウンロード',
+      submitIdle: '今すぐダウンロード',
       submitLoading: 'ダウンロード中...',
       waitlistSuccess: 'ありがとうございます！リストに登録されました。Mandarinがリリースされたらメールをお送りします。',
       waitlistErrorInline: 'エラーが発生しました。もう一度お試しください。',
@@ -343,17 +343,23 @@ const translations = {
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [language, setLanguage] = useState<'en' | 'mn' | 'ja'>('mn');
+  const [language, setLanguage] = useState<'en' | 'mn'>('mn');
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
   const text = translations[language];
+  const getBaseUrl = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin;
+    }
+    return 'https://mandarinpay.app';
+  };
+
   const languages = [
     { code: 'mn', name: 'Монгол хэл', flag: '🇲🇳', url: null },
-    { code: 'en', name: 'English', flag: '🇺🇸', url: 'https://mandarinpay.app/?lang=en' },
-    { code: 'ja', name: '日本語', flag: '🇯🇵', url: 'https://mandarinpay.app/?lang=ja' }
+    { code: 'en', name: 'English', flag: '🇺🇸', url: `${getBaseUrl()}/?lang=en` }
   ];
 
-  const handleLanguageChange = (langCode: 'en' | 'mn' | 'ja') => {
+  const handleLanguageChange = (langCode: 'en' | 'mn') => {
     const selectedLanguage = languages.find(lang => lang.code === langCode);
     
     if (selectedLanguage?.url) {
@@ -416,8 +422,8 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search);
     const langParam = urlParams.get('lang');
     
-    if (langParam && ['en', 'mn', 'ja'].includes(langParam)) {
-      setLanguage(langParam as 'en' | 'mn' | 'ja');
+    if (langParam && ['en', 'mn'].includes(langParam)) {
+      setLanguage(langParam as 'en' | 'mn');
     }
   }, []);
 
@@ -486,7 +492,7 @@ function App() {
                       {languages.map((lang) => (
                         <button
                           key={lang.code}
-                          onClick={() => handleLanguageChange(lang.code as 'en' | 'mn' | 'ja')}
+                          onClick={() => handleLanguageChange(lang.code as 'en' | 'mn')}
                           className={`w-full flex items-center px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors ${
                             language === lang.code ? 'text-green-400' : 'text-gray-300'
                           }`}
@@ -527,14 +533,14 @@ function App() {
                 <div className="py-3">
                   <div className="flex items-center gap-3 text-gray-300 mb-2">
                     <Globe className="w-5 h-5" aria-hidden="true" />
-                    <span>Language / Хэл / 言語</span>
+                    <span>Language / Хэл</span>
                   </div>
                   <div className="grid grid-cols-1 gap-2 ml-8">
                     {languages.map((lang) => (
                       <button
                         key={lang.code}
                         onClick={() => {
-                          handleLanguageChange(lang.code as 'en' | 'mn' | 'ja');
+                          handleLanguageChange(lang.code as 'en' | 'mn');
                           setIsMobileMenuOpen(false);
                         }}
                         className={`flex items-center gap-2 text-sm py-2 px-3 rounded-lg transition-colors text-left ${
@@ -569,9 +575,12 @@ function App() {
       <div className="relative overflow-hidden min-h-screen pt-32 pb-24 flex flex-col justify-center">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-0 translate-y-[-40px] lg:translate-y-[-50px]">
           <div className="stagger relative z-20 text-center mx-auto max-w-3xl pb-8 mt-6">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight relative z-30">
-              <span className="block">{text.hero.headingLine1}</span>
-              <span className="block">{text.hero.headingLine2}</span>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight relative z-30">
+              <span className="block relative">
+                {text.hero.headingLine1}
+                <div className="absolute -bottom-5 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-60"></div>
+              </span>
+              {text.hero.headingLine2 && <span className="block">{text.hero.headingLine2}</span>}
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed relative z-20">
               {text.hero.description}
@@ -681,7 +690,7 @@ function App() {
               <p className="text-gray-300 mb-3 md:mb-4">{text.features.createTripsDescription}</p>
               <div className="relative w-[80%] mx-auto rounded-2xl mt-4 md:mt-auto">
                 <img
-                  src="/created_trip.png"
+                  src={language === 'mn' ? "/your_trip_mongol.png" : "/created_trip.png"}
                   alt={text.features.createTripsAlt}
                   className="w-full h-auto rounded-2xl object-contain"
                 />
@@ -693,7 +702,7 @@ function App() {
               <p className="text-gray-300 mb-3 md:mb-4">{text.features.trackExpensesDescription}</p>
               <div className="relative w-[80%] mx-auto rounded-2xl mt-4 md:mt-auto">
                 <img
-                  src="/expenses.png"
+                  src={language === 'mn' ? "/expense_mongol.png" : "/expenses.png"}
                   alt={text.features.trackExpensesAlt}
                   className="w-full h-auto rounded-2xl object-contain"
                 />
@@ -762,7 +771,7 @@ function App() {
               <p className="text-gray-300 mb-3 md:mb-4">{text.balances.description}</p>
               <div className="relative w-[80%] mx-auto rounded-2xl mt-4 md:mt-auto">
                 <img
-                  src="/balances.png"
+                  src={language === 'mn' ? "/balances_mongol.png" : "/balances.png"}
                   alt={text.balances.alt}
                   className="w-full h-auto rounded-2xl object-contain"
                 />
@@ -774,7 +783,7 @@ function App() {
               <p className="text-gray-300 mb-3 md:mb-4">{text.balances.smartDescription}</p>
               <div className="relative w-[80%] mx-auto rounded-2xl mt-4 md:mt-auto">
                 <img
-                  src="/reimbursement.png"
+                  src={language === 'mn' ? "/reimbursement_mongol.png" : "/reimbursement.png"}
                   alt={text.balances.smartAlt}
                   className="w-full h-auto rounded-2xl object-contain"
                 />
