@@ -33,21 +33,11 @@ const translations = {
     },
     hero: {
       headingLine1: 'The effortless way to',
-      headingLine2: 'split expenses.',
+      headingLine2: 'split expenses',
       description:
         'Split group expenses instantly. Track who owes what. Get your money back without the awkward conversations.',
-      emailLabel: 'Email address',
-      emailPlaceholder: 'you@example.com',
       submitIdle: 'Download Now',
-      submitLoading: 'Joining...',
-      waitlistSuccess: "Thanks! You're on the list. We'll email you when Mandarin launches.",
-      waitlistErrorInline: 'Something went wrong. Please try again.',
-      waitlistIdle: "Join the waitlist and we'll email you the moment Mandarin goes live.",
-      waitlistErrorLater: 'Something went wrong. Please try again later.',
       heroAlt: 'Mandarin preview',
-    },
-    validation: {
-      invalidEmail: 'Please enter a valid email address.',
     },
     problem: {
       title: 'Too shy to ask for your money back?',
@@ -142,19 +132,8 @@ const translations = {
       headingLine2: '',
       description:
         'Төлбөрийн тооцоог хялбар, ухаалгаар шийдье',
-      emailLabel: 'Имэйл хаяг',
-      emailPlaceholder: 'ta@example.com',
       submitIdle: 'Татаж авах',
-      submitLoading: 'Нэгдэж байна...',
-      waitlistSuccess: 'Баярлалаа! Таныг жагсаалтад бүртгэлээ. Mandarin нээгдэхэд бид имэйл илгээнэ.',
-      waitlistErrorInline: 'Алдаа гарлаа. Дахин оролдоно уу.',
-      waitlistIdle:
-        'Хүлээлгийн жагсаалтад бүртгүүлээд Mandarin албан ёсоор эхлэхэд бид танд имэйлээр мэдэгдэнэ.',
-      waitlistErrorLater: 'Алдаа гарлаа. Та түр хүлээгээд дахин оролдоно уу.',
       heroAlt: 'Mandarin-ийн дэлгэцийн загвар',
-    },
-    validation: {
-      invalidEmail: 'Хүчинтэй имэйл хаяг оруулна уу.',
     },
     problem: {
       title: 'Өөрөөсөө гаргасан мөнгөө эргүүлж нэхэхээс ичээд байна уу?',
@@ -232,110 +211,6 @@ const translations = {
     },
     footer: {
       suffix: 'Бүх эрх хуулиар хамгаалагдсан.',
-    },
-  },
-  ja: {
-    nav: {
-      goHomeAria: 'ホームに戻る',
-      logoAlt: 'Mandarinロゴ',
-      privacy: 'プライバシー',
-      terms: '利用規約',
-      support: 'サポート',
-      langSwitcher: {
-        aria: '言語を切り替え',
-        title: '日本語',
-      },
-    },
-    hero: {
-      headingLine1: '簡単に',
-      headingLine2: '費用を分割。',
-      description:
-        'グループの費用を瞬時に分割。誰がいくら支払うべきかを追跡。気まずい会話なしでお金を取り戻しましょう。',
-      emailLabel: 'メールアドレス',
-      emailPlaceholder: 'you@example.com',
-      submitIdle: '今すぐダウンロード',
-      submitLoading: 'ダウンロード中...',
-      waitlistSuccess: 'ありがとうございます！リストに登録されました。Mandarinがリリースされたらメールをお送りします。',
-      waitlistErrorInline: 'エラーが発生しました。もう一度お試しください。',
-      waitlistIdle: 'ウェイトリストに参加して、Mandarinが正式に開始したらすぐにメールでお知らせします。',
-      waitlistErrorLater: 'エラーが発生しました。後でもう一度お試しください。',
-      heroAlt: 'Mandarinプレビュー',
-    },
-    validation: {
-      invalidEmail: '有効なメールアドレスを入力してください。',
-    },
-    problem: {
-      title: 'お金を返してもらうのが恥ずかしいですか？',
-      description: '明確な証拠とともに代わりに処理します。誰が何を支払うべきかについての気まずい会話はもうありません。',
-      awkwardAsk: {
-        title: '気まずいお願い',
-        description: '「あの...先週のディナー覚えてる？47.50ドル返してくれる？」',
-      },
-      confusion: {
-        title: '混乱',
-        description: '「待って、もう返したんじゃなかった？いつだっけ？」',
-      },
-      lostMoney: {
-        title: '失われたお金',
-        description: '「まあ、簡単だから」と思って結局自分で負担することになる',
-      },
-      solutionTitle: 'Mandarinがすべてを処理',
-      solutionBullets: [
-        '友達と旅行を作成',
-        '自動的な費用分割',
-        '完全な支払い履歴',
-        '優しい支払いリマインダー',
-        '領収書写真の証拠（近日公開）',
-      ],
-    },
-    features: {
-      createTripsTitle: '旅行を作成',
-      createTripsDescription: '友達や大切な人と簡単に旅行を作成。',
-      createTripsAlt: '旅行作成画面',
-      trackExpensesTitle: '費用を追跡',
-      trackExpensesDescription: '旅行の費用を簡単に追加・追跡',
-      trackExpensesAlt: '費用画面',
-    },
-    hiddenBenefits: {
-      title: '100%無料。隠し条件なし。',
-      description: '友達同士のお金のやり取りはシンプルであるべきだと信じています',
-      cards: [
-        {
-          title: 'お金を取り戻す',
-          description: 'グループ費用でお金を失うのをやめましょう。すべてを追跡し、支払いを思い出させます。',
-        },
-        {
-          title: '瞬時分割',
-          description: '領収書の写真を撮る。友達を追加。30秒で完了。',
-        },
-        {
-          title: '気まずい会話なし',
-          description: '証拠として領収書とともにリマインダーを送信。友情を保ちましょう。',
-        },
-      ],
-    },
-    balances: {
-      title: '旅行の残高を確認',
-      description: '参加者それぞれの残高をいつでも簡単に確認し、旅行全体を通じて明確で透明な追跡を確保。',
-      alt: '残高画面',
-      smartTitle: 'スマート返金',
-      smartDescription: '参加者間の取引数を最小化する最も効率的な借金精算方法を自動計算。',
-      smartAlt: '返金画面',
-    },
-    socialProof: {
-      title: '他の人に信頼されています',
-      quotes: [
-        '「ついにルームメイトからベガス旅行の200ドルを取り戻せました。領収書の写真があったので反論できませんでした！」',
-        '「もうスプレッドシートや気まずいメッセージは不要。私たちのグループは今、ディナー、旅行、光熱費などすべてにこれを使っています。」',
-        '「友達グループを多くのドラマから救いました。自動リマインダーは丁寧ですが効果的です。」',
-      ],
-    },
-    social: {
-      title: 'フォローしてください',
-      subtitle: '最新情報を取得して挨拶しましょう',
-    },
-    footer: {
-      suffix: '全著作権所有。',
     },
   },
 } as const;
@@ -578,9 +453,16 @@ function App() {
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight relative z-30">
               <span className="block relative">
                 {text.hero.headingLine1}
-                <div className="absolute -bottom-5 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-60"></div>
+                {(!text.hero.headingLine2 || text.hero.headingLine2 === '') && (
+                  <div className="absolute -bottom-5 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-60"></div>
+                )}
               </span>
-              {text.hero.headingLine2 && <span className="block">{text.hero.headingLine2}</span>}
+              {text.hero.headingLine2 && text.hero.headingLine2 !== '' && (
+                <span className="block relative">
+                  {text.hero.headingLine2}
+                  <div className="absolute -bottom-5 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-60"></div>
+                </span>
+              )}
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed relative z-20">
               {text.hero.description}
@@ -594,9 +476,9 @@ function App() {
               >
                 {text.hero.submitIdle}
               </button>
-              <div className="flex items-center justify-center sm:justify-start text-green-400">
-                <CheckCircle className="w-5 h-5 mr-2" />
-                <span className="text-sm font-medium">{text.hiddenBenefits.title}</span>
+              <div className="flex items-center justify-center sm:justify-start">
+                <CheckCircle className="w-5 h-5 mr-2 text-green-400" />
+                <span className="text-sm font-medium text-white">{text.hiddenBenefits.title}</span>
               </div>
             </div>
 
@@ -718,7 +600,7 @@ function App() {
       <div className="py-20 hidden">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               {text.hiddenBenefits.title}
             </h2>
             <p className="text-xl text-gray-300">

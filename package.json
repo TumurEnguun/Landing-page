@@ -1,7 +1,8 @@
 {
-    "name": "vite-react-typescript-starter",
+    "name": "mandarin-landing-page",
     "private": true,
-    "version": "0.0.0",
+    "version": "1.0.0",
+    "description": "Mandarin expense splitting app landing page",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -10,9 +11,6 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@supabase/supabase-js": "^2.57.4",
-        "cors": "^2.8.5",
-        "express": "^5.1.0",
         "lucide-react": "^0.344.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1"
