@@ -176,7 +176,7 @@
           <span>Mandarin</span>
         </div>
         <h1>Open the invite in Mandarin</h1>
-        <p id="subtitle" class="lead">We'll launch the app so you can jump straight into your group.</p>
+        <p id="subtitle" class="lead">Tap the button below to open this trip invite in the Mandarin app.</p>
 
         <div class="actions">
           <a id="open-app" class="button primary" href="#">Open in the app</a>
@@ -209,12 +209,21 @@
         openAppButton.href = deepLink;
         openAppButton.addEventListener('click', (event) => {
           event.preventDefault();
+          
+          // Try to open the app
           window.location.href = deepLink;
+          
+          // If the app doesn't open within 2 seconds, show fallback
+          setTimeout(() => {
+            if (document.visibilityState === 'visible') {
+              fallback.hidden = false;
+            }
+          }, 2000);
         });
 
         fallbackTimer = window.setTimeout(() => {
           fallback.hidden = false;
-        }, 1800);
+        }, 3000);
 
         document.addEventListener('visibilitychange', () => {
           if (document.visibilityState === 'hidden' && fallbackTimer) {
@@ -222,7 +231,8 @@
           }
         });
 
-        window.location.href = deepLink;
+        // Don't auto-redirect - let user click the button instead
+        // This fixes Facebook Messenger compatibility
       } else {
         openAppButton.remove();
         subtitle.textContent = 'This invite link looks incomplete. Ask the trip organizer to share it again or open Mandarin and join from the Trips tab.';
