@@ -4,6 +4,42 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Join Mandarin Trip</title>
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Join Mandarin Trip" />
+    <meta property="og:description" content="Join this trip invite in the Mandarin expense splitting app" />
+    <meta property="og:image" content="https://www.mandarinpay.app/logo_mark.png" />
+    <meta property="og:url" content="" />
+    <meta property="og:site_name" content="Mandarin" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Join Mandarin Trip" />
+    <meta property="twitter:description" content="Join this trip invite in the Mandarin expense splitting app" />
+    <meta property="twitter:image" content="https://www.mandarinpay.app/logo_mark.png" />
+    
+    <!-- App Links / Deep Linking -->
+    <meta property="al:ios:app_name" content="Mandarin" />
+    <meta property="al:ios:app_store_id" content="1234567890" />
+    <meta property="al:ios:url" content="mandarinapp:///trip/TRIP_ID/join" />
+    
+    <meta property="al:android:app_name" content="Mandarin" />
+    <meta property="al:android:package" content="com.mandarin.app" />
+    <meta property="al:android:url" content="mandarinapp:///trip/TRIP_ID/join" />
+    
+    <!-- Facebook App Links -->
+    <meta property="fb:app_id" content="YOUR_FACEBOOK_APP_ID" />
+    
+    <!-- Additional meta for better compatibility -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Mandarin" />
+    
+    <!-- Prevent caching issues -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <style>
       :root {
         color-scheme: light;
@@ -183,10 +219,18 @@
         </div>
 
         <div id="fallback" class="fallback" hidden>
-          <p>Nothing happened? Install Mandarin below, then return to this link and we'll take you straight to the group.</p>
+          <p>Can't open the app? Make sure you have Mandarin installed, or download it below and try again.</p>
           <div class="store-links">
             <a class="button" href="https://apps.apple.com/app/mandarin-expense-splitter/id1234567890" target="_blank" rel="noreferrer">Download for iOS</a>
             <a class="button" href="https://play.google.com/store/apps/details?id=com.mandarin.app" target="_blank" rel="noreferrer">Download for Android</a>
+          </div>
+          <p style="margin-top: 16px; font-size: 14px; color: var(--fg-muted);">
+            After installing, come back to this link and tap "Open in the app" again.
+          </p>
+          <div style="margin-top: 16px; text-align: center;">
+            <button id="try-again" class="button" style="background: rgba(34, 197, 94, 0.1); color: var(--accent-dark); border-color: rgba(34, 197, 94, 0.24);">
+              Try Again
+            </button>
           </div>
         </div>
       </section>
@@ -207,18 +251,30 @@
       if (tripId) {
         const deepLink = `mandarinapp:///trip/${tripId}/join`
         openAppButton.href = deepLink;
+        
+        // Update meta tags with actual trip ID
+        const currentUrl = window.location.href;
+        document.querySelector('meta[property="og:url"]').setAttribute('content', currentUrl);
+        document.querySelector('meta[property="al:ios:url"]').setAttribute('content', deepLink);
+        document.querySelector('meta[property="al:android:url"]').setAttribute('content', deepLink);
         openAppButton.addEventListener('click', (event) => {
           event.preventDefault();
           
-          // Try to open the app
-          window.location.href = deepLink;
+          // Create a hidden iframe to try the deep link
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.src = deepLink;
+          document.body.appendChild(iframe);
           
-          // If the app doesn't open within 2 seconds, show fallback
+          // Remove iframe after attempt
           setTimeout(() => {
-            if (document.visibilityState === 'visible') {
-              fallback.hidden = false;
-            }
-          }, 2000);
+            document.body.removeChild(iframe);
+          }, 1000);
+          
+          // Show fallback after a short delay
+          setTimeout(() => {
+            fallback.hidden = false;
+          }, 1500);
         });
 
         fallbackTimer = window.setTimeout(() => {
@@ -230,6 +286,33 @@
             window.clearTimeout(fallbackTimer);
           }
         });
+
+        // Handle "Try Again" button
+        const tryAgainButton = document.getElementById('try-again');
+        if (tryAgainButton) {
+          tryAgainButton.addEventListener('click', () => {
+            // Hide fallback and try the deep link again
+            fallback.hidden = true;
+            
+            // Create a hidden iframe to try the deep link
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = deepLink;
+            document.body.appendChild(iframe);
+            
+            // Remove iframe after attempt
+            setTimeout(() => {
+              document.body.removeChild(iframe);
+            }, 1000);
+            
+            // Show fallback again after a short delay
+            setTimeout(() => {
+              if (document.visibilityState === 'visible') {
+                fallback.hidden = false;
+              }
+            }, 1500);
+          });
+        }
 
         // Don't auto-redirect - let user click the button instead
         // This fixes Facebook Messenger compatibility
