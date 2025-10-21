@@ -284,46 +284,60 @@
       // Detect if we're in Messenger or similar in-app browsers
       function isMessenger() {
         const userAgent = navigator.userAgent.toLowerCase();
-        const isInApp = userAgent.includes('messenger') || 
-                       userAgent.includes('fbav') || 
-                       userAgent.includes('fban') ||
-                       userAgent.includes('fban') ||
-                       userAgent.includes('instagram') ||
-                       userAgent.includes('whatsapp') ||
-                       userAgent.includes('telegram') ||
-                       userAgent.includes('twitter') ||
-                       userAgent.includes('linkedin') ||
-                       window.location.href.includes('messenger') ||
-                       document.referrer.includes('messenger') ||
-                       document.referrer.includes('facebook') ||
-                       document.referrer.includes('instagram') ||
-                       document.referrer.includes('whatsapp') ||
-                       document.referrer.includes('telegram');
         
-        // Also check if we're in a webview (common in social apps)
+        // Check for Messenger/Facebook in-app browser
+        const isMessengerApp = userAgent.includes('messenger') || 
+                              userAgent.includes('fbav') || 
+                              userAgent.includes('fban') ||
+                              userAgent.includes('fban') ||
+                              userAgent.includes('facebook') ||
+                              window.location.href.includes('messenger') ||
+                              document.referrer.includes('messenger') ||
+                              document.referrer.includes('facebook');
+        
+        // Check for other in-app browsers
+        const isOtherInApp = userAgent.includes('instagram') ||
+                            userAgent.includes('whatsapp') ||
+                            userAgent.includes('telegram') ||
+                            userAgent.includes('twitter') ||
+                            userAgent.includes('linkedin') ||
+                            document.referrer.includes('instagram') ||
+                            document.referrer.includes('whatsapp') ||
+                            document.referrer.includes('telegram');
+        
+        // Check for webview indicators
         const isWebView = userAgent.includes('wv') || 
                          userAgent.includes('webview') ||
                          (userAgent.includes('android') && !userAgent.includes('chrome')) ||
                          (userAgent.includes('iphone') && !userAgent.includes('safari'));
         
-        return isInApp || isWebView;
+        // Special case: If URL contains /join/ it's likely from Messenger
+        const isJoinLink = window.location.pathname.includes('/join/');
+        
+        return isMessengerApp || isOtherInApp || isWebView || isJoinLink;
       }
 
       // Extract trip ID from URL - try multiple methods
       function getTripId() {
-        // Method 1: From URL path (e.g., /trip-join.html/TRIP_ID)
+        // Method 1: From URL path like /join/TRIP_ID
         const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const joinIndex = pathParts.indexOf('join');
+        if (joinIndex !== -1 && joinIndex + 1 < pathParts.length) {
+          return pathParts[joinIndex + 1];
+        }
+
+        // Method 2: From URL path (e.g., /trip-join.html/TRIP_ID)
         const lastSegment = pathParts[pathParts.length - 1];
         if (lastSegment && lastSegment !== 'join' && lastSegment !== 'trip-join.html') {
           return lastSegment;
         }
 
-        // Method 2: From URL hash (e.g., /trip-join.html#TRIP_ID)
+        // Method 3: From URL hash (e.g., /trip-join.html#TRIP_ID)
         if (window.location.hash) {
           return window.location.hash.substring(1);
         }
 
-        // Method 3: From URL search params (e.g., /trip-join.html?trip=TRIP_ID)
+        // Method 4: From URL search params (e.g., /trip-join.html?trip=TRIP_ID)
         const urlParams = new URLSearchParams(window.location.search);
         const tripParam = urlParams.get('trip') || urlParams.get('id') || urlParams.get('tripId');
         if (tripParam) {
@@ -350,42 +364,34 @@
       
       function startAutoRedirect() {
         if (tripId && !inMessenger) {
-          console.log('Starting auto-redirect in 2 seconds...');
+          console.log('Starting instant auto-redirect...');
           
-          // Show cancel button
+          // Show cancel button briefly
           const cancelButton = document.getElementById('cancel-redirect');
           if (cancelButton) {
             cancelButton.style.display = 'block';
-          }
-          
-          // Show countdown
-          let countdown = 2;
-          countdownInterval = setInterval(() => {
-            if (countdown > 0) {
-              openAppButton.textContent = `Opening app in ${countdown}...`;
-              countdown--;
-            } else {
-              clearInterval(countdownInterval);
-              openAppButton.textContent = 'Opening app...';
-              
-              // Hide cancel button
+            // Hide cancel button after 1 second
+            setTimeout(() => {
               if (cancelButton) {
                 cancelButton.style.display = 'none';
               }
-              
-              // Attempt to open the app
-              attemptDeepLink();
-              
-              // Show fallback after delay if app doesn't open
-              autoRedirectTimeout = setTimeout(() => {
-                if (document.visibilityState === 'visible') {
-                  console.log('Auto-redirect failed, showing fallback');
-                  fallback.hidden = false;
-                  openAppButton.textContent = 'Open in the app';
-                }
-              }, 3000);
+            }, 1000);
+          }
+          
+          // Show brief loading message
+          openAppButton.textContent = 'Opening app...';
+          
+          // Attempt to open the app immediately
+          attemptDeepLink();
+          
+          // Show fallback after shorter delay if app doesn't open
+          autoRedirectTimeout = setTimeout(() => {
+            if (document.visibilityState === 'visible') {
+              console.log('Auto-redirect failed, showing fallback');
+              fallback.hidden = false;
+              openAppButton.textContent = 'Open in the app';
             }
-          }, 1000);
+          }, 1500); // Reduced from 3000ms to 1500ms
         }
       }
       
@@ -530,33 +536,49 @@
             }, 1000);
             
           } else {
-            // For regular browsers, use the standard approach
-            // Method 1: Direct window.location (works best in most browsers)
-            window.location.href = primaryDeepLink;
+            // For regular browsers, use multiple methods for better compatibility
+            console.log('Using multi-method approach for better browser compatibility');
             
-            // Method 2: Create hidden iframe (backup)
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.style.width = '1px';
-            iframe.style.height = '1px';
-            iframe.src = primaryDeepLink;
-            document.body.appendChild(iframe);
+            // Method 1: Try direct navigation first
+            try {
+              window.location.href = primaryDeepLink;
+            } catch (e) {
+              console.log('Direct navigation failed:', e);
+            }
             
-            // Method 3: Try with setTimeout
+            // Method 2: Try with window.open as backup
+            setTimeout(() => {
+              try {
+                const newWindow = window.open(primaryDeepLink, '_self');
+                if (!newWindow) {
+                  console.log('Window.open blocked, trying iframe method');
+                  // Method 3: Iframe fallback
+                  const iframe = document.createElement('iframe');
+                  iframe.style.display = 'none';
+                  iframe.style.width = '1px';
+                  iframe.style.height = '1px';
+                  iframe.src = primaryDeepLink;
+                  document.body.appendChild(iframe);
+                  
+                  setTimeout(() => {
+                    if (document.body.contains(iframe)) {
+                      document.body.removeChild(iframe);
+                    }
+                  }, 2000);
+                }
+              } catch (e) {
+                console.log('Window.open failed:', e);
+              }
+            }, 100);
+            
+            // Method 4: Try again with a slight delay (helps with Brave)
             setTimeout(() => {
               try {
                 window.location.href = primaryDeepLink;
               } catch (e) {
-                console.log('Direct navigation failed, trying iframe method');
+                console.log('Second attempt failed:', e);
               }
-            }, 100);
-            
-            // Clean up iframe
-            setTimeout(() => {
-              if (document.body.contains(iframe)) {
-                document.body.removeChild(iframe);
-              }
-            }, 3000);
+            }, 200);
           }
         }
         
