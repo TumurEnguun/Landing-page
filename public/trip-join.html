@@ -242,45 +242,92 @@
       const fallback = document.getElementById('fallback');
       const openAppButton = document.getElementById('open-app');
 
-      const pathParts = window.location.pathname.split('/').filter(Boolean);
-      const lastSegment = pathParts[pathParts.length - 1];
-      const tripId = lastSegment && lastSegment !== 'join' ? lastSegment : '';
+      // Extract trip ID from URL - try multiple methods
+      function getTripId() {
+        // Method 1: From URL path (e.g., /trip-join.html/TRIP_ID)
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const lastSegment = pathParts[pathParts.length - 1];
+        if (lastSegment && lastSegment !== 'join' && lastSegment !== 'trip-join.html') {
+          return lastSegment;
+        }
+
+        // Method 2: From URL hash (e.g., /trip-join.html#TRIP_ID)
+        if (window.location.hash) {
+          return window.location.hash.substring(1);
+        }
+
+        // Method 3: From URL search params (e.g., /trip-join.html?trip=TRIP_ID)
+        const urlParams = new URLSearchParams(window.location.search);
+        const tripParam = urlParams.get('trip') || urlParams.get('id') || urlParams.get('tripId');
+        if (tripParam) {
+          return tripParam;
+        }
+
+        return null;
+      }
+
+      const tripId = getTripId();
+      console.log('Extracted trip ID:', tripId); // Debug log
 
       let fallbackTimer;
+      let hasAttemptedOpen = false;
 
       if (tripId) {
-        const deepLink = `mandarinapp:///trip/${tripId}/join`
-        openAppButton.href = deepLink;
+        // Try multiple deep link formats
+        const deepLinks = [
+          `mandarinapp://trip/${tripId}/join`,
+          `mandarinapp:///trip/${tripId}/join`,
+          `mandarin://trip/${tripId}/join`,
+          `mandarin:///trip/${tripId}/join`
+        ];
+        
+        const primaryDeepLink = deepLinks[0];
+        openAppButton.href = primaryDeepLink;
         
         // Update meta tags with actual trip ID
         const currentUrl = window.location.href;
         document.querySelector('meta[property="og:url"]').setAttribute('content', currentUrl);
-        document.querySelector('meta[property="al:ios:url"]').setAttribute('content', deepLink);
-        document.querySelector('meta[property="al:android:url"]').setAttribute('content', deepLink);
+        document.querySelector('meta[property="al:ios:url"]').setAttribute('content', primaryDeepLink);
+        document.querySelector('meta[property="al:android:url"]').setAttribute('content', primaryDeepLink);
+        
         openAppButton.addEventListener('click', (event) => {
           event.preventDefault();
+          hasAttemptedOpen = true;
           
-          // Create a hidden iframe to try the deep link
+          console.log('Attempting to open deep link:', primaryDeepLink); // Debug log
+          
+          // Try direct navigation first
+          window.location.href = primaryDeepLink;
+          
+          // Also try with iframe as backup
           const iframe = document.createElement('iframe');
           iframe.style.display = 'none';
-          iframe.src = deepLink;
+          iframe.src = primaryDeepLink;
           document.body.appendChild(iframe);
           
           // Remove iframe after attempt
           setTimeout(() => {
-            document.body.removeChild(iframe);
-          }, 1000);
+            if (document.body.contains(iframe)) {
+              document.body.removeChild(iframe);
+            }
+          }, 2000);
           
-          // Show fallback after a short delay
+          // Show fallback after a longer delay to give app time to open
           setTimeout(() => {
-            fallback.hidden = false;
-          }, 1500);
+            if (document.visibilityState === 'visible') {
+              fallback.hidden = false;
+            }
+          }, 3000);
         });
 
+        // Show fallback after 5 seconds if no interaction
         fallbackTimer = window.setTimeout(() => {
-          fallback.hidden = false;
-        }, 3000);
+          if (!hasAttemptedOpen) {
+            fallback.hidden = false;
+          }
+        }, 5000);
 
+        // Clear timer if user leaves the page (app opened successfully)
         document.addEventListener('visibilitychange', () => {
           if (document.visibilityState === 'hidden' && fallbackTimer) {
             window.clearTimeout(fallbackTimer);
@@ -293,30 +340,38 @@
           tryAgainButton.addEventListener('click', () => {
             // Hide fallback and try the deep link again
             fallback.hidden = true;
+            hasAttemptedOpen = false;
             
-            // Create a hidden iframe to try the deep link
+            console.log('Trying again with deep link:', primaryDeepLink); // Debug log
+            
+            // Try direct navigation
+            window.location.href = primaryDeepLink;
+            
+            // Also try with iframe
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';
-            iframe.src = deepLink;
+            iframe.src = primaryDeepLink;
             document.body.appendChild(iframe);
             
             // Remove iframe after attempt
             setTimeout(() => {
-              document.body.removeChild(iframe);
-            }, 1000);
+              if (document.body.contains(iframe)) {
+                document.body.removeChild(iframe);
+              }
+            }, 2000);
             
-            // Show fallback again after a short delay
+            // Show fallback again after delay
             setTimeout(() => {
               if (document.visibilityState === 'visible') {
                 fallback.hidden = false;
               }
-            }, 1500);
+            }, 3000);
           });
         }
 
-        // Don't auto-redirect - let user click the button instead
-        // This fixes Facebook Messenger compatibility
       } else {
+        // No trip ID found
+        console.log('No trip ID found in URL'); // Debug log
         openAppButton.remove();
         subtitle.textContent = 'This invite link looks incomplete. Ask the trip organizer to share it again or open Mandarin and join from the Trips tab.';
         fallback.hidden = false;
