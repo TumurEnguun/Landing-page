@@ -22,11 +22,11 @@
     <!-- App Links / Deep Linking -->
     <meta property="al:ios:app_name" content="Mandarin" />
     <meta property="al:ios:app_store_id" content="6751082606" />
-    <meta property="al:ios:url" content="mandarinapp://trip/TRIP_ID/join" />
+    <meta property="al:ios:url" content="https://mandarinpay.app/join/TRIP_ID" />
     
     <meta property="al:android:app_name" content="Mandarin" />
     <meta property="al:android:package" content="com.mandarin.expensetracker" />
-    <meta property="al:android:url" content="mandarinapp://trip/TRIP_ID/join" />
+    <meta property="al:android:url" content="https://mandarinpay.app/join/TRIP_ID" />
     
     <!-- Facebook App Links -->
     <meta property="fb:app_id" content="845173207855586" />
@@ -464,6 +464,7 @@
       if (tripId) {
         // Try multiple deep link formats
         const deepLinks = [
+          `https://mandarinpay.app/join/${tripId}`, // Universal Link approach
           `mandarinapp://trip/${tripId}/join`,
           `mandarinapp:///trip/${tripId}/join`,
           `mandarin://trip/${tripId}/join`,
@@ -584,17 +585,17 @@
         
         // Update button text and fallback text for Messenger users
         if (inMessenger) {
-          openAppButton.textContent = 'Open in Browser';
-          subtitle.textContent = 'Messenger detected! Tap "Open in Browser" to open this link in your default browser, then the Mandarin app will open automatically.';
+          openAppButton.textContent = 'Copy Link & Open in Browser';
+          subtitle.textContent = 'Messenger detected! Tap the button to copy the link, then paste it in your browser to join the trip.';
           
           // Update fallback text for Messenger
           const fallbackText = document.getElementById('fallback-text');
           const fallbackInstructions = document.getElementById('fallback-instructions');
           if (fallbackText) {
-            fallbackText.textContent = 'Messenger blocks app links for security. Open this link in your browser to join the trip in Mandarin.';
+            fallbackText.textContent = 'Messenger blocks app links for security. Copy the link and open it in your browser to join the trip.';
           }
           if (fallbackInstructions) {
-            fallbackInstructions.textContent = '1. Tap "Open in Browser" above 2. The page will open in your default browser 3. The Mandarin app will open automatically with this trip invite.';
+            fallbackInstructions.textContent = '1. Tap "Copy Link & Open in Browser" above 2. Copy the link that appears 3. Paste it in Safari/Chrome 4. The Mandarin app will open automatically.';
           }
         }
 
@@ -603,37 +604,44 @@
           hasAttemptedOpen = true;
           
           if (inMessenger) {
-            // For Messenger, open in external browser with auto-redirect
-            console.log('Messenger detected, opening in external browser');
+            // For Messenger, copy the link to clipboard
+            console.log('Messenger detected, copying link to clipboard');
             
             // Create URL that will auto-redirect in external browser
             const currentUrl = window.location.href;
             const externalUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'external=true&auto=true';
             
-            // Try to open in external browser
-            try {
-              // Method 1: Direct window.open
-              const newWindow = window.open(externalUrl, '_blank');
-              
-              // Method 2: If that fails, try with a delay
-              setTimeout(() => {
-                if (!newWindow || newWindow.closed) {
-                  console.log('Direct open failed, trying alternative method');
-                  // Create a temporary link and click it
-                  const tempLink = document.createElement('a');
-                  tempLink.href = externalUrl;
-                  tempLink.target = '_blank';
-                  tempLink.rel = 'noopener noreferrer';
-                  document.body.appendChild(tempLink);
-                  tempLink.click();
-                  document.body.removeChild(tempLink);
-                }
-              }, 100);
-              
-            } catch (e) {
-              console.log('All external browser methods failed');
-              // Show fallback if external browser fails
-              fallback.hidden = false;
+            // Try to copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(externalUrl).then(() => {
+                console.log('Link copied to clipboard');
+                // Show success message
+                openAppButton.textContent = 'Link Copied! Open in Browser';
+                openAppButton.style.background = '#16a34a';
+                
+                // Try to open in external browser as well
+                setTimeout(() => {
+                  try {
+                    window.open(externalUrl, '_blank', 'noopener,noreferrer');
+                  } catch (e) {
+                    console.log('Could not open external browser');
+                  }
+                }, 500);
+                
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                  openAppButton.textContent = 'Copy Link & Open in Browser';
+                  openAppButton.style.background = '';
+                }, 3000);
+                
+              }).catch(err => {
+                console.log('Failed to copy to clipboard:', err);
+                // Fallback: show the link in an alert
+                alert(`Copy this link and open it in your browser:\n\n${externalUrl}`);
+              });
+            } else {
+              // Fallback for older browsers
+              alert(`Copy this link and open it in your browser:\n\n${externalUrl}`);
             }
           } else {
             // For regular browsers, use the standard approach
