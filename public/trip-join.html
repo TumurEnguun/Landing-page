@@ -9,7 +9,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Join Mandarin Trip" />
     <meta property="og:description" content="Join this trip invite in the Mandarin expense splitting app" />
-    <meta property="og:image" content="https://www.mandarinpay.app/logo_mark.png" />
+    <meta property="og:image" content="https://mandarinpay.app/logo_mark.png" />
     <meta property="og:url" content="" />
     <meta property="og:site_name" content="Mandarin" />
     
@@ -17,27 +17,48 @@
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:title" content="Join Mandarin Trip" />
     <meta property="twitter:description" content="Join this trip invite in the Mandarin expense splitting app" />
-    <meta property="twitter:image" content="https://www.mandarinpay.app/logo_mark.png" />
+    <meta property="twitter:image" content="https://mandarinpay.app/logo_mark.png" />
     
     <!-- App Links / Deep Linking -->
     <meta property="al:ios:app_name" content="Mandarin" />
-    <meta property="al:ios:app_store_id" content="1234567890" />
-    <meta property="al:ios:url" content="mandarinapp:///trip/TRIP_ID/join" />
+    <meta property="al:ios:app_store_id" content="6751082606" />
+    <meta property="al:ios:url" content="mandarinapp://trip/TRIP_ID/join" />
     
     <meta property="al:android:app_name" content="Mandarin" />
-    <meta property="al:android:package" content="com.mandarin.app" />
-    <meta property="al:android:url" content="mandarinapp:///trip/TRIP_ID/join" />
+    <meta property="al:android:package" content="com.mandarin.expensetracker" />
+    <meta property="al:android:url" content="mandarinapp://trip/TRIP_ID/join" />
     
     <!-- Facebook App Links -->
-    <meta property="fb:app_id" content="YOUR_FACEBOOK_APP_ID" />
+    <meta property="fb:app_id" content="2001851270610916" />
     
     <!-- Facebook Messenger specific meta tags -->
     <meta property="al:web:url" content="" />
     <meta property="al:web:should_fallback" content="true" />
     
+    <!-- Additional Facebook/Messenger meta tags -->
+    <meta property="fb:app_id" content="2001851270610916" />
+    <meta property="al:web:should_fallback" content="true" />
+    <meta property="al:web:url" content="https://mandarinpay.app/trip-join.html/TRIP_ID" />
+    
+    <!-- Messenger specific deep link handling -->
+    <meta name="messenger:app_id" content="2001851270610916" />
+    <meta name="messenger:should_fallback" content="true" />
+    
     <!-- Additional deep link meta tags for better compatibility -->
     <meta name="apple-itunes-app" content="app-argument=mandarinapp://trip/TRIP_ID/join" />
-    <meta name="google-play-app" content="app-id=com.mandarin.app" />
+    <meta name="google-play-app" content="app-id=com.mandarin.expensetracker" />
+    
+    <!-- Universal Links for iOS -->
+    <meta property="al:ios:url" content="https://mandarinpay.app/trip-join.html/TRIP_ID" />
+    
+    <!-- App Links for Android -->
+    <meta property="al:android:url" content="https://mandarinpay.app/trip-join.html/TRIP_ID" />
+    
+    <!-- Additional meta tags for better app detection -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Mandarin" />
+    <meta name="msapplication-TileColor" content="#22c55e" />
+    <meta name="theme-color" content="#22c55e" />
     
     <!-- Additional meta for better compatibility -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -238,8 +259,8 @@
         <div id="fallback" class="fallback" hidden>
           <p id="fallback-text">Can't open the app? Make sure you have Mandarin installed, or download it below and try again.</p>
           <div class="store-links">
-            <a class="button" href="https://apps.apple.com/app/mandarin-expense-splitter/id1234567890" target="_blank" rel="noreferrer">Download for iOS</a>
-            <a class="button" href="https://play.google.com/store/apps/details?id=com.mandarin.app" target="_blank" rel="noreferrer">Download for Android</a>
+            <a class="button" href="https://apps.apple.com/app/mandarin/id6751082606" target="_blank" rel="noreferrer">Download for iOS</a>
+            <a class="button" href="https://play.google.com/store/apps/details?id=com.mandarin.expensetracker" target="_blank" rel="noreferrer">Download for Android</a>
           </div>
           <p id="fallback-instructions" style="margin-top: 16px; font-size: 14px; color: var(--fg-muted);">
             After installing, come back to this link and tap "Open in the app" again.
@@ -415,11 +436,35 @@
         
         // Update meta tags with actual trip ID
         const currentUrl = window.location.href;
+        const webUrl = currentUrl.replace('trip-join.html', `trip-join.html/${tripId}`);
+        
+        // Update Open Graph URL
         document.querySelector('meta[property="og:url"]').setAttribute('content', currentUrl);
+        
+        // Update App Links with deep links
         document.querySelector('meta[property="al:ios:url"]').setAttribute('content', primaryDeepLink);
         document.querySelector('meta[property="al:android:url"]').setAttribute('content', primaryDeepLink);
-        document.querySelector('meta[property="al:web:url"]').setAttribute('content', currentUrl);
+        
+        // Update web fallback URL
+        document.querySelector('meta[property="al:web:url"]').setAttribute('content', webUrl);
+        
+        // Update Apple iTunes app meta
         document.querySelector('meta[name="apple-itunes-app"]').setAttribute('content', `app-argument=${primaryDeepLink}`);
+        
+        // Update Universal Links and App Links with web URLs
+        const iosWebUrl = `https://mandarinpay.app/trip-join.html/${tripId}`;
+        const androidWebUrl = `https://mandarinpay.app/trip-join.html/${tripId}`;
+        
+        // Add additional meta tags for Universal Links
+        const additionalIosMeta = document.createElement('meta');
+        additionalIosMeta.setAttribute('property', 'al:ios:url');
+        additionalIosMeta.setAttribute('content', iosWebUrl);
+        document.head.appendChild(additionalIosMeta);
+        
+        const additionalAndroidMeta = document.createElement('meta');
+        additionalAndroidMeta.setAttribute('property', 'al:android:url');
+        additionalAndroidMeta.setAttribute('content', androidWebUrl);
+        document.head.appendChild(additionalAndroidMeta);
         
         // Function to attempt deep link opening
         function attemptDeepLink() {
@@ -503,8 +548,11 @@
           hasAttemptedOpen = true;
           
           if (inMessenger) {
-            // For in-app browsers, try to open in external browser
-            console.log('In-app browser detected, attempting to open in external browser');
+            // For in-app browsers, show fallback immediately and try to open in external browser
+            console.log('In-app browser detected, showing fallback and attempting external browser');
+            
+            // Show fallback immediately
+            fallback.hidden = false;
             
             // Try to open the current page in external browser
             const currentUrl = window.location.href;
@@ -531,8 +579,7 @@
               }, 100);
               
             } catch (e) {
-              console.log('All methods failed, showing fallback');
-              fallback.hidden = false;
+              console.log('All external browser methods failed');
             }
             
             // Still try the deep link as a backup
