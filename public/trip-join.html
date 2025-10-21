@@ -220,10 +220,19 @@
           <span>Mandarin</span>
         </div>
         <h1>Open the invite in Mandarin</h1>
-        <p id="subtitle" class="lead">Tap the button below to open this trip invite in the Mandarin app.</p>
+        <p id="subtitle" class="lead">This page will automatically try to open the Mandarin app in a few seconds, or you can tap the button below.</p>
+        <div id="debug-info" style="display: none; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 12px; color: #666;">
+          <strong>Debug Info:</strong><br>
+          <span id="debug-user-agent"></span><br>
+          <span id="debug-referrer"></span><br>
+          <span id="debug-detection"></span>
+        </div>
 
         <div class="actions">
           <a id="open-app" class="button primary" href="#">Open in the app</a>
+          <button id="cancel-redirect" class="button" style="background: rgba(255, 255, 255, 0.1); color: var(--fg-muted); border-color: rgba(255, 255, 255, 0.2); margin-top: 8px; display: none;">
+            Cancel Auto-Open
+          </button>
         </div>
 
         <div id="fallback" class="fallback" hidden>
@@ -250,14 +259,32 @@
       const fallback = document.getElementById('fallback');
       const openAppButton = document.getElementById('open-app');
 
-      // Detect if we're in Messenger
+      // Detect if we're in Messenger or similar in-app browsers
       function isMessenger() {
         const userAgent = navigator.userAgent.toLowerCase();
-        return userAgent.includes('messenger') || 
-               userAgent.includes('fbav') || 
-               userAgent.includes('fban') ||
-               window.location.href.includes('messenger') ||
-               document.referrer.includes('messenger');
+        const isInApp = userAgent.includes('messenger') || 
+                       userAgent.includes('fbav') || 
+                       userAgent.includes('fban') ||
+                       userAgent.includes('fban') ||
+                       userAgent.includes('instagram') ||
+                       userAgent.includes('whatsapp') ||
+                       userAgent.includes('telegram') ||
+                       userAgent.includes('twitter') ||
+                       userAgent.includes('linkedin') ||
+                       window.location.href.includes('messenger') ||
+                       document.referrer.includes('messenger') ||
+                       document.referrer.includes('facebook') ||
+                       document.referrer.includes('instagram') ||
+                       document.referrer.includes('whatsapp') ||
+                       document.referrer.includes('telegram');
+        
+        // Also check if we're in a webview (common in social apps)
+        const isWebView = userAgent.includes('wv') || 
+                         userAgent.includes('webview') ||
+                         (userAgent.includes('android') && !userAgent.includes('chrome')) ||
+                         (userAgent.includes('iphone') && !userAgent.includes('safari'));
+        
+        return isInApp || isWebView;
       }
 
       // Extract trip ID from URL - try multiple methods
@@ -287,10 +314,92 @@
       const tripId = getTripId();
       const inMessenger = isMessenger();
       console.log('Extracted trip ID:', tripId);
-      console.log('In Messenger:', inMessenger);
+      console.log('In Messenger/In-App Browser:', inMessenger);
+      console.log('User Agent:', navigator.userAgent);
+      console.log('Referrer:', document.referrer);
 
       let fallbackTimer;
       let hasAttemptedOpen = false;
+
+      // Auto-redirect functionality
+      let countdownInterval;
+      let autoRedirectTimeout;
+      
+      function startAutoRedirect() {
+        if (tripId && !inMessenger) {
+          console.log('Starting auto-redirect in 2 seconds...');
+          
+          // Show cancel button
+          const cancelButton = document.getElementById('cancel-redirect');
+          if (cancelButton) {
+            cancelButton.style.display = 'block';
+          }
+          
+          // Show countdown
+          let countdown = 2;
+          countdownInterval = setInterval(() => {
+            if (countdown > 0) {
+              openAppButton.textContent = `Opening app in ${countdown}...`;
+              countdown--;
+            } else {
+              clearInterval(countdownInterval);
+              openAppButton.textContent = 'Opening app...';
+              
+              // Hide cancel button
+              if (cancelButton) {
+                cancelButton.style.display = 'none';
+              }
+              
+              // Attempt to open the app
+              attemptDeepLink();
+              
+              // Show fallback after delay if app doesn't open
+              autoRedirectTimeout = setTimeout(() => {
+                if (document.visibilityState === 'visible') {
+                  console.log('Auto-redirect failed, showing fallback');
+                  fallback.hidden = false;
+                  openAppButton.textContent = 'Open in the app';
+                }
+              }, 3000);
+            }
+          }, 1000);
+        }
+      }
+      
+      function cancelAutoRedirect() {
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+        }
+        if (autoRedirectTimeout) {
+          clearTimeout(autoRedirectTimeout);
+        }
+        
+        const cancelButton = document.getElementById('cancel-redirect');
+        if (cancelButton) {
+          cancelButton.style.display = 'none';
+        }
+        
+        openAppButton.textContent = 'Open in the app';
+        console.log('Auto-redirect cancelled by user');
+      }
+
+      // For in-app browsers, show fallback immediately
+      if (inMessenger) {
+        console.log('In-app browser detected, showing fallback immediately');
+        fallback.hidden = false;
+      } else {
+        // Start auto-redirect for regular browsers
+        startAutoRedirect();
+      }
+
+      // Show debug info (remove this in production)
+      const debugInfo = document.getElementById('debug-info');
+      if (debugInfo) {
+        debugInfo.style.display = 'block';
+        document.getElementById('debug-user-agent').textContent = 'User Agent: ' + navigator.userAgent;
+        document.getElementById('debug-referrer').textContent = 'Referrer: ' + (document.referrer || 'None');
+        document.getElementById('debug-detection').textContent = 'In-App Browser: ' + inMessenger;
+      }
 
       if (tripId) {
         // Try multiple deep link formats
@@ -394,9 +503,37 @@
           hasAttemptedOpen = true;
           
           if (inMessenger) {
-            // For Messenger, show fallback immediately since deep links often don't work
-            console.log('Messenger detected, showing fallback options');
-            fallback.hidden = false;
+            // For in-app browsers, try to open in external browser
+            console.log('In-app browser detected, attempting to open in external browser');
+            
+            // Try to open the current page in external browser
+            const currentUrl = window.location.href;
+            const externalUrl = currentUrl.replace('trip-join.html', 'trip-join.html?external=true');
+            
+            // Try multiple methods to open in external browser
+            try {
+              // Method 1: Direct window.open
+              const newWindow = window.open(externalUrl, '_blank');
+              
+              // Method 2: If that fails, try with a delay
+              setTimeout(() => {
+                if (!newWindow || newWindow.closed) {
+                  console.log('Direct open failed, trying alternative method');
+                  // Create a temporary link and click it
+                  const tempLink = document.createElement('a');
+                  tempLink.href = externalUrl;
+                  tempLink.target = '_blank';
+                  tempLink.rel = 'noopener noreferrer';
+                  document.body.appendChild(tempLink);
+                  tempLink.click();
+                  document.body.removeChild(tempLink);
+                }
+              }, 100);
+              
+            } catch (e) {
+              console.log('All methods failed, showing fallback');
+              fallback.hidden = false;
+            }
             
             // Still try the deep link as a backup
             attemptDeepLink();
@@ -461,6 +598,14 @@
                 fallback.hidden = false;
               }
             }, 4000);
+          });
+        }
+
+        // Handle "Cancel Auto-Open" button
+        const cancelButton = document.getElementById('cancel-redirect');
+        if (cancelButton) {
+          cancelButton.addEventListener('click', () => {
+            cancelAutoRedirect();
           });
         }
 
