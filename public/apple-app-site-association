@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "TAHZF5W734.com.mandarin.expensetracker",
+        "paths": ["/join/*"]
+      }
+    ]
+  }
+}
