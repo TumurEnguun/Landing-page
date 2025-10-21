@@ -29,19 +29,19 @@
     <meta property="al:android:url" content="mandarinapp://trip/TRIP_ID/join" />
     
     <!-- Facebook App Links -->
-    <meta property="fb:app_id" content="2001851270610916" />
+    <meta property="fb:app_id" content="845173207855586" />
     
     <!-- Facebook Messenger specific meta tags -->
     <meta property="al:web:url" content="" />
     <meta property="al:web:should_fallback" content="true" />
     
     <!-- Additional Facebook/Messenger meta tags -->
-    <meta property="fb:app_id" content="2001851270610916" />
+    <meta property="fb:app_id" content="845173207855586" />
     <meta property="al:web:should_fallback" content="true" />
     <meta property="al:web:url" content="https://mandarinpay.app/trip-join.html/TRIP_ID" />
     
     <!-- Messenger specific deep link handling -->
-    <meta name="messenger:app_id" content="2001851270610916" />
+    <meta name="messenger:app_id" content="845173207855586" />
     <meta name="messenger:should_fallback" content="true" />
     
     <!-- Additional deep link meta tags for better compatibility -->
@@ -69,6 +69,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    
     <style>
       :root {
         color-scheme: light;
@@ -339,6 +340,7 @@
       console.log('User Agent:', navigator.userAgent);
       console.log('Referrer:', document.referrer);
 
+
       let fallbackTimer;
       let hasAttemptedOpen = false;
 
@@ -404,12 +406,21 @@
         console.log('Auto-redirect cancelled by user');
       }
 
+      // Check if we're in external browser (opened from Messenger)
+      const urlParams = new URLSearchParams(window.location.search);
+      const isExternal = urlParams.get('external') === 'true';
+      const shouldAuto = urlParams.get('auto') === 'true';
+
       // For in-app browsers, show fallback immediately
       if (inMessenger) {
         console.log('In-app browser detected, showing fallback immediately');
         fallback.hidden = false;
+      } else if (isExternal && shouldAuto) {
+        // External browser opened from Messenger - start auto-redirect immediately
+        console.log('External browser detected, starting auto-redirect immediately');
+        startAutoRedirect();
       } else {
-        // Start auto-redirect for regular browsers
+        // Regular browser - start auto-redirect with delay
         startAutoRedirect();
       }
 
@@ -420,7 +431,29 @@
         document.getElementById('debug-user-agent').textContent = 'User Agent: ' + navigator.userAgent;
         document.getElementById('debug-referrer').textContent = 'Referrer: ' + (document.referrer || 'None');
         document.getElementById('debug-detection').textContent = 'In-App Browser: ' + inMessenger;
+        
+        // Add more debug info
+        const debugDiv = document.createElement('div');
+        debugDiv.innerHTML = `
+          <strong>Deep Link Debug:</strong><br>
+          Trip ID: ${tripId || 'NOT FOUND'}<br>
+          Primary Deep Link: ${tripId ? `mandarinapp://trip/${tripId}/join` : 'N/A'}<br>
+          Current URL: ${window.location.href}<br>
+          <button onclick="testDeepLink()" style="margin-top: 10px; padding: 5px 10px; background: #22c55e; color: white; border: none; border-radius: 5px;">Test Deep Link</button>
+        `;
+        debugInfo.appendChild(debugDiv);
       }
+
+      // Test function for debugging
+      window.testDeepLink = function() {
+        if (tripId) {
+          const testLink = `mandarinapp://trip/${tripId}/join`;
+          console.log('Testing deep link:', testLink);
+          window.location.href = testLink;
+        } else {
+          alert('No trip ID found!');
+        }
+      };
 
       if (tripId) {
         // Try multiple deep link formats
@@ -530,16 +563,16 @@
         // Update button text and fallback text for Messenger users
         if (inMessenger) {
           openAppButton.textContent = 'Open in Browser';
-          subtitle.textContent = 'Tap the button below to open this trip invite in your browser, then open the Mandarin app.';
+          subtitle.textContent = 'Messenger detected! Tap "Open in Browser" to open this link in your default browser, then the Mandarin app will open automatically.';
           
           // Update fallback text for Messenger
           const fallbackText = document.getElementById('fallback-text');
           const fallbackInstructions = document.getElementById('fallback-instructions');
           if (fallbackText) {
-            fallbackText.textContent = 'Messenger detected! For the best experience, open this link in your browser first, then tap "Open in the app".';
+            fallbackText.textContent = 'Messenger blocks app links for security. Open this link in your browser to join the trip in Mandarin.';
           }
           if (fallbackInstructions) {
-            fallbackInstructions.textContent = '1. Tap "Open in Browser" above 2. When the page opens in your browser, tap "Open in the app" 3. The Mandarin app will open with this trip invite.';
+            fallbackInstructions.textContent = '1. Tap "Open in Browser" above 2. The page will open in your default browser 3. The Mandarin app will open automatically with this trip invite.';
           }
         }
 
@@ -548,17 +581,14 @@
           hasAttemptedOpen = true;
           
           if (inMessenger) {
-            // For in-app browsers, show fallback immediately and try to open in external browser
-            console.log('In-app browser detected, showing fallback and attempting external browser');
+            // For Messenger, open in external browser with auto-redirect
+            console.log('Messenger detected, opening in external browser');
             
-            // Show fallback immediately
-            fallback.hidden = false;
-            
-            // Try to open the current page in external browser
+            // Create URL that will auto-redirect in external browser
             const currentUrl = window.location.href;
-            const externalUrl = currentUrl.replace('trip-join.html', 'trip-join.html?external=true');
+            const externalUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'external=true&auto=true';
             
-            // Try multiple methods to open in external browser
+            // Try to open in external browser
             try {
               // Method 1: Direct window.open
               const newWindow = window.open(externalUrl, '_blank');
@@ -580,10 +610,9 @@
               
             } catch (e) {
               console.log('All external browser methods failed');
+              // Show fallback if external browser fails
+              fallback.hidden = false;
             }
-            
-            // Still try the deep link as a backup
-            attemptDeepLink();
           } else {
             // For regular browsers, use the standard approach
             // Try multiple times with different methods for better reliability
