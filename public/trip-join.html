@@ -31,6 +31,14 @@
     <!-- Facebook App Links -->
     <meta property="fb:app_id" content="YOUR_FACEBOOK_APP_ID" />
     
+    <!-- Facebook Messenger specific meta tags -->
+    <meta property="al:web:url" content="" />
+    <meta property="al:web:should_fallback" content="true" />
+    
+    <!-- Additional deep link meta tags for better compatibility -->
+    <meta name="apple-itunes-app" content="app-argument=mandarinapp://trip/TRIP_ID/join" />
+    <meta name="google-play-app" content="app-id=com.mandarin.app" />
+    
     <!-- Additional meta for better compatibility -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -289,35 +297,61 @@
         document.querySelector('meta[property="og:url"]').setAttribute('content', currentUrl);
         document.querySelector('meta[property="al:ios:url"]').setAttribute('content', primaryDeepLink);
         document.querySelector('meta[property="al:android:url"]').setAttribute('content', primaryDeepLink);
+        document.querySelector('meta[property="al:web:url"]').setAttribute('content', currentUrl);
+        document.querySelector('meta[name="apple-itunes-app"]').setAttribute('content', `app-argument=${primaryDeepLink}`);
+        
+        // Function to attempt deep link opening
+        function attemptDeepLink() {
+          console.log('Attempting to open deep link:', primaryDeepLink);
+          
+          // Method 1: Direct window.location (works best in most browsers)
+          window.location.href = primaryDeepLink;
+          
+          // Method 2: Create hidden iframe (backup for Messenger and other apps)
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.style.width = '1px';
+          iframe.style.height = '1px';
+          iframe.src = primaryDeepLink;
+          document.body.appendChild(iframe);
+          
+          // Method 3: Try with setTimeout (helps with Messenger)
+          setTimeout(() => {
+            try {
+              window.location.href = primaryDeepLink;
+            } catch (e) {
+              console.log('Direct navigation failed, trying iframe method');
+            }
+          }, 100);
+          
+          // Clean up iframe
+          setTimeout(() => {
+            if (document.body.contains(iframe)) {
+              document.body.removeChild(iframe);
+            }
+          }, 3000);
+        }
         
         openAppButton.addEventListener('click', (event) => {
           event.preventDefault();
           hasAttemptedOpen = true;
           
-          console.log('Attempting to open deep link:', primaryDeepLink); // Debug log
+          // Try multiple times with different methods for better reliability
+          attemptDeepLink();
           
-          // Try direct navigation first
-          window.location.href = primaryDeepLink;
-          
-          // Also try with iframe as backup
-          const iframe = document.createElement('iframe');
-          iframe.style.display = 'none';
-          iframe.src = primaryDeepLink;
-          document.body.appendChild(iframe);
-          
-          // Remove iframe after attempt
+          // Try again after a short delay (fixes first-attempt failure)
           setTimeout(() => {
-            if (document.body.contains(iframe)) {
-              document.body.removeChild(iframe);
+            if (document.visibilityState === 'visible') {
+              attemptDeepLink();
             }
-          }, 2000);
+          }, 500);
           
           // Show fallback after a longer delay to give app time to open
           setTimeout(() => {
             if (document.visibilityState === 'visible') {
               fallback.hidden = false;
             }
-          }, 3000);
+          }, 4000);
         });
 
         // Show fallback after 5 seconds if no interaction
@@ -342,30 +376,24 @@
             fallback.hidden = true;
             hasAttemptedOpen = false;
             
-            console.log('Trying again with deep link:', primaryDeepLink); // Debug log
+            console.log('Trying again with deep link:', primaryDeepLink);
             
-            // Try direct navigation
-            window.location.href = primaryDeepLink;
+            // Use the same improved method
+            attemptDeepLink();
             
-            // Also try with iframe
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = primaryDeepLink;
-            document.body.appendChild(iframe);
-            
-            // Remove iframe after attempt
+            // Try again after a short delay
             setTimeout(() => {
-              if (document.body.contains(iframe)) {
-                document.body.removeChild(iframe);
+              if (document.visibilityState === 'visible') {
+                attemptDeepLink();
               }
-            }, 2000);
+            }, 500);
             
             // Show fallback again after delay
             setTimeout(() => {
               if (document.visibilityState === 'visible') {
                 fallback.hidden = false;
               }
-            }, 3000);
+            }, 4000);
           });
         }
 
