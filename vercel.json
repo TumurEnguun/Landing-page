@@ -1,12 +1,4 @@
 {
-  "functions": {
-    ".well-known/apple-app-site-association": {
-      "runtime": "@vercel/static"
-    },
-    ".well-known/assetlinks.json": {
-      "runtime": "@vercel/static"
-    }
-  },
   "headers": [
     {
       "source": "/.well-known/apple-app-site-association",
