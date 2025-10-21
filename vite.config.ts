@@ -1,24 +1,30 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { copyFileSync, mkdirSync, existsSync } from 'fs';
+import { join } from 'path';
+
+// Plugin to copy .well-known folder
+const copyWellKnownPlugin = () => ({
+  name: 'copy-well-known',
+  writeBundle() {
+    const distDir = 'dist';
+    const wellKnownDir = join(distDir, '.well-known');
+    
+    if (!existsSync(wellKnownDir)) {
+      mkdirSync(wellKnownDir, { recursive: true });
+    }
+    
+    // Copy files
+    copyFileSync('public/.well-known/apple-app-site-association', join(wellKnownDir, 'apple-app-site-association'));
+    copyFileSync('public/.well-known/assetlinks.json', join(wellKnownDir, 'assetlinks.json'));
+  }
+});
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), copyWellKnownPlugin()],
   optimizeDeps: {
     exclude: ['lucide-react'],
-  },
-  build: {
-    rollupOptions: {
-      output: {
-        assetFileNames: (assetInfo) => {
-          // Keep .well-known files with their original names
-          if (assetInfo.name && assetInfo.name.includes('.well-known')) {
-            return assetInfo.name;
-          }
-          return 'assets/[name]-[hash][extname]';
-        }
-      }
-    }
   },
   server: {
     headers: {
