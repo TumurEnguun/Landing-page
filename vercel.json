@@ -1,12 +1,30 @@
 {
-  "rewrites": [
+  "functions": {
+    ".well-known/apple-app-site-association": {
+      "runtime": "@vercel/static"
+    },
+    ".well-known/assetlinks.json": {
+      "runtime": "@vercel/static"
+    }
+  },
+  "headers": [
     {
       "source": "/.well-known/apple-app-site-association",
-      "destination": "/apple-app-site-association"
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ]
     },
     {
       "source": "/.well-known/assetlinks.json",
-      "destination": "/assetlinks.json"
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ]
     }
   ]
 }
