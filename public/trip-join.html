@@ -443,9 +443,10 @@
         debugDiv.innerHTML = `
           <strong>Deep Link Debug:</strong><br>
           Trip ID: ${tripId || 'NOT FOUND'}<br>
-          Primary Deep Link: ${tripId ? `mandarinapp://trip/${tripId}/join` : 'N/A'}<br>
+          Universal Link: ${tripId ? `https://mandarinpay.app/join/${tripId}` : 'N/A'}<br>
+          Custom Scheme: ${tripId ? `mandarinapp://trip/${tripId}/join` : 'N/A'}<br>
           Current URL: ${window.location.href}<br>
-          <button onclick="testDeepLink()" style="margin-top: 10px; padding: 5px 10px; background: #22c55e; color: white; border: none; border-radius: 5px;">Test Deep Link</button>
+          <button onclick="testDeepLink()" style="margin-top: 10px; padding: 5px 10px; background: #22c55e; color: white; border: none; border-radius: 5px;">Test Universal Link</button>
         `;
         debugInfo.appendChild(debugDiv);
       }
@@ -453,8 +454,8 @@
       // Test function for debugging
       window.testDeepLink = function() {
         if (tripId) {
-          const testLink = `mandarinapp://trip/${tripId}/join`;
-          console.log('Testing deep link:', testLink);
+          const testLink = `https://mandarinpay.app/join/${tripId}`;
+          console.log('Testing Universal Link:', testLink);
           window.location.href = testLink;
         } else {
           alert('No trip ID found!');
@@ -462,13 +463,13 @@
       };
 
       if (tripId) {
-        // Try multiple deep link formats
+        // Try multiple deep link formats - Universal Links first for better Messenger support
         const deepLinks = [
-          `https://mandarinpay.app/join/${tripId}`, // Universal Link approach
-          `mandarinapp://trip/${tripId}/join`,
-          `mandarinapp:///trip/${tripId}/join`,
-          `mandarin://trip/${tripId}/join`,
-          `mandarin:///trip/${tripId}/join`
+          `https://mandarinpay.app/join/${tripId}`, // Universal Link - works in Messenger
+          `mandarinapp://trip/${tripId}/join`,     // Custom scheme - fallback
+          `mandarinapp:///trip/${tripId}/join`,    // Custom scheme variant
+          `mandarin://trip/${tripId}/join`,        // Alternative scheme
+          `mandarin:///trip/${tripId}/join`        // Alternative scheme variant
         ];
         
         const primaryDeepLink = deepLinks[0];
