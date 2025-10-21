@@ -18,5 +18,11 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/trip-join.html/:tripId",
+      "destination": "/trip-join.html"
+    }
   ]
 }

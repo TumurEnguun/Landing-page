@@ -319,25 +319,31 @@
 
       // Extract trip ID from URL - try multiple methods
       function getTripId() {
-        // Method 1: From URL path like /join/TRIP_ID
+        // Method 1: From URL path like /trip-join.html/TRIP_ID (most common)
         const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const tripJoinIndex = pathParts.indexOf('trip-join.html');
+        if (tripJoinIndex !== -1 && tripJoinIndex + 1 < pathParts.length) {
+          return pathParts[tripJoinIndex + 1];
+        }
+
+        // Method 2: From URL path like /join/TRIP_ID
         const joinIndex = pathParts.indexOf('join');
         if (joinIndex !== -1 && joinIndex + 1 < pathParts.length) {
           return pathParts[joinIndex + 1];
         }
 
-        // Method 2: From URL path (e.g., /trip-join.html/TRIP_ID)
+        // Method 3: From URL path (e.g., /trip-join.html/TRIP_ID) - fallback
         const lastSegment = pathParts[pathParts.length - 1];
         if (lastSegment && lastSegment !== 'join' && lastSegment !== 'trip-join.html') {
           return lastSegment;
         }
 
-        // Method 3: From URL hash (e.g., /trip-join.html#TRIP_ID)
+        // Method 4: From URL hash (e.g., /trip-join.html#TRIP_ID)
         if (window.location.hash) {
           return window.location.hash.substring(1);
         }
 
-        // Method 4: From URL search params (e.g., /trip-join.html?trip=TRIP_ID)
+        // Method 5: From URL search params (e.g., /trip-join.html?trip=TRIP_ID)
         const urlParams = new URLSearchParams(window.location.search);
         const tripParam = urlParams.get('trip') || urlParams.get('id') || urlParams.get('tripId');
         if (tripParam) {
