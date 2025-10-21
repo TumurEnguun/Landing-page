@@ -227,12 +227,12 @@
         </div>
 
         <div id="fallback" class="fallback" hidden>
-          <p>Can't open the app? Make sure you have Mandarin installed, or download it below and try again.</p>
+          <p id="fallback-text">Can't open the app? Make sure you have Mandarin installed, or download it below and try again.</p>
           <div class="store-links">
             <a class="button" href="https://apps.apple.com/app/mandarin-expense-splitter/id1234567890" target="_blank" rel="noreferrer">Download for iOS</a>
             <a class="button" href="https://play.google.com/store/apps/details?id=com.mandarin.app" target="_blank" rel="noreferrer">Download for Android</a>
           </div>
-          <p style="margin-top: 16px; font-size: 14px; color: var(--fg-muted);">
+          <p id="fallback-instructions" style="margin-top: 16px; font-size: 14px; color: var(--fg-muted);">
             After installing, come back to this link and tap "Open in the app" again.
           </p>
           <div style="margin-top: 16px; text-align: center;">
@@ -249,6 +249,16 @@
       const subtitle = document.getElementById('subtitle');
       const fallback = document.getElementById('fallback');
       const openAppButton = document.getElementById('open-app');
+
+      // Detect if we're in Messenger
+      function isMessenger() {
+        const userAgent = navigator.userAgent.toLowerCase();
+        return userAgent.includes('messenger') || 
+               userAgent.includes('fbav') || 
+               userAgent.includes('fban') ||
+               window.location.href.includes('messenger') ||
+               document.referrer.includes('messenger');
+      }
 
       // Extract trip ID from URL - try multiple methods
       function getTripId() {
@@ -275,7 +285,9 @@
       }
 
       const tripId = getTripId();
-      console.log('Extracted trip ID:', tripId); // Debug log
+      const inMessenger = isMessenger();
+      console.log('Extracted trip ID:', tripId);
+      console.log('In Messenger:', inMessenger);
 
       let fallbackTimer;
       let hasAttemptedOpen = false;
@@ -304,54 +316,109 @@
         function attemptDeepLink() {
           console.log('Attempting to open deep link:', primaryDeepLink);
           
-          // Method 1: Direct window.location (works best in most browsers)
-          window.location.href = primaryDeepLink;
-          
-          // Method 2: Create hidden iframe (backup for Messenger and other apps)
-          const iframe = document.createElement('iframe');
-          iframe.style.display = 'none';
-          iframe.style.width = '1px';
-          iframe.style.height = '1px';
-          iframe.src = primaryDeepLink;
-          document.body.appendChild(iframe);
-          
-          // Method 3: Try with setTimeout (helps with Messenger)
-          setTimeout(() => {
-            try {
-              window.location.href = primaryDeepLink;
-            } catch (e) {
-              console.log('Direct navigation failed, trying iframe method');
-            }
-          }, 100);
-          
-          // Clean up iframe
-          setTimeout(() => {
-            if (document.body.contains(iframe)) {
-              document.body.removeChild(iframe);
-            }
-          }, 3000);
+          if (inMessenger) {
+            // For Messenger, use a different approach to avoid the error page
+            console.log('Using Messenger-specific deep link method');
+            
+            // Method 1: Try to open in new tab first (Messenger often blocks direct navigation)
+            const newWindow = window.open(primaryDeepLink, '_blank');
+            
+            // Method 2: If that fails, use iframe method
+            setTimeout(() => {
+              if (!newWindow || newWindow.closed) {
+                console.log('New window blocked, trying iframe method');
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.style.width = '1px';
+                iframe.style.height = '1px';
+                iframe.src = primaryDeepLink;
+                document.body.appendChild(iframe);
+                
+                setTimeout(() => {
+                  if (document.body.contains(iframe)) {
+                    document.body.removeChild(iframe);
+                  }
+                }, 2000);
+              }
+            }, 1000);
+            
+          } else {
+            // For regular browsers, use the standard approach
+            // Method 1: Direct window.location (works best in most browsers)
+            window.location.href = primaryDeepLink;
+            
+            // Method 2: Create hidden iframe (backup)
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.style.width = '1px';
+            iframe.style.height = '1px';
+            iframe.src = primaryDeepLink;
+            document.body.appendChild(iframe);
+            
+            // Method 3: Try with setTimeout
+            setTimeout(() => {
+              try {
+                window.location.href = primaryDeepLink;
+              } catch (e) {
+                console.log('Direct navigation failed, trying iframe method');
+              }
+            }, 100);
+            
+            // Clean up iframe
+            setTimeout(() => {
+              if (document.body.contains(iframe)) {
+                document.body.removeChild(iframe);
+              }
+            }, 3000);
+          }
         }
         
+        // Update button text and fallback text for Messenger users
+        if (inMessenger) {
+          openAppButton.textContent = 'Open in Browser';
+          subtitle.textContent = 'Tap the button below to open this trip invite in your browser, then open the Mandarin app.';
+          
+          // Update fallback text for Messenger
+          const fallbackText = document.getElementById('fallback-text');
+          const fallbackInstructions = document.getElementById('fallback-instructions');
+          if (fallbackText) {
+            fallbackText.textContent = 'Messenger detected! For the best experience, open this link in your browser first, then tap "Open in the app".';
+          }
+          if (fallbackInstructions) {
+            fallbackInstructions.textContent = '1. Tap "Open in Browser" above 2. When the page opens in your browser, tap "Open in the app" 3. The Mandarin app will open with this trip invite.';
+          }
+        }
+
         openAppButton.addEventListener('click', (event) => {
           event.preventDefault();
           hasAttemptedOpen = true;
           
-          // Try multiple times with different methods for better reliability
-          attemptDeepLink();
-          
-          // Try again after a short delay (fixes first-attempt failure)
-          setTimeout(() => {
-            if (document.visibilityState === 'visible') {
-              attemptDeepLink();
-            }
-          }, 500);
-          
-          // Show fallback after a longer delay to give app time to open
-          setTimeout(() => {
-            if (document.visibilityState === 'visible') {
-              fallback.hidden = false;
-            }
-          }, 4000);
+          if (inMessenger) {
+            // For Messenger, show fallback immediately since deep links often don't work
+            console.log('Messenger detected, showing fallback options');
+            fallback.hidden = false;
+            
+            // Still try the deep link as a backup
+            attemptDeepLink();
+          } else {
+            // For regular browsers, use the standard approach
+            // Try multiple times with different methods for better reliability
+            attemptDeepLink();
+            
+            // Try again after a short delay (fixes first-attempt failure)
+            setTimeout(() => {
+              if (document.visibilityState === 'visible') {
+                attemptDeepLink();
+              }
+            }, 500);
+            
+            // Show fallback after a longer delay to give app time to open
+            setTimeout(() => {
+              if (document.visibilityState === 'visible') {
+                fallback.hidden = false;
+              }
+            }, 4000);
+          }
         });
 
         // Show fallback after 5 seconds if no interaction
