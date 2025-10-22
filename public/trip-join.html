@@ -423,10 +423,19 @@
       const isExternal = urlParams.get('external') === 'true';
       const shouldAuto = urlParams.get('auto') === 'true';
 
-      // For in-app browsers, show fallback immediately
+      // For in-app browsers, try to open app first (like TripCount)
       if (inMessenger) {
-        console.log('In-app browser detected, showing fallback immediately');
-        fallback.hidden = false;
+        console.log('In-app browser detected, attempting to open app directly');
+        // Try to open the app immediately in Messenger
+        attemptDeepLink();
+        
+        // Show fallback after delay if app doesn't open
+        setTimeout(() => {
+          if (document.visibilityState === 'visible') {
+            console.log('App did not open in Messenger, showing fallback');
+            fallback.hidden = false;
+          }
+        }, 2000);
       } else if (isExternal && shouldAuto) {
         // External browser opened from Messenger - start auto-redirect immediately
         console.log('External browser detected, starting auto-redirect immediately');
@@ -518,30 +527,40 @@
           console.log('Attempting to open deep link:', primaryDeepLink);
           
           if (inMessenger) {
-            // For Messenger, use a different approach to avoid the error page
-            console.log('Using Messenger-specific deep link method');
+            // For Messenger, try multiple methods like TripCount does
+            console.log('Using Messenger deep link methods');
             
-            // Method 1: Try to open in new tab first (Messenger often blocks direct navigation)
-            const newWindow = window.open(primaryDeepLink, '_blank');
+            // Method 1: Try direct navigation first (works in some Messenger versions)
+            try {
+              window.location.href = primaryDeepLink;
+            } catch (e) {
+              console.log('Direct navigation failed:', e);
+            }
             
-            // Method 2: If that fails, use iframe method
+            // Method 2: Try iframe method (most reliable in Messenger)
             setTimeout(() => {
-              if (!newWindow || newWindow.closed) {
-                console.log('New window blocked, trying iframe method');
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.style.width = '1px';
-                iframe.style.height = '1px';
-                iframe.src = primaryDeepLink;
-                document.body.appendChild(iframe);
-                
-                setTimeout(() => {
-                  if (document.body.contains(iframe)) {
-                    document.body.removeChild(iframe);
-                  }
-                }, 2000);
+              const iframe = document.createElement('iframe');
+              iframe.style.display = 'none';
+              iframe.style.width = '1px';
+              iframe.style.height = '1px';
+              iframe.src = primaryDeepLink;
+              document.body.appendChild(iframe);
+              
+              setTimeout(() => {
+                if (document.body.contains(iframe)) {
+                  document.body.removeChild(iframe);
+                }
+              }, 2000);
+            }, 100);
+            
+            // Method 3: Try window.open as backup
+            setTimeout(() => {
+              try {
+                window.open(primaryDeepLink, '_self');
+              } catch (e) {
+                console.log('Window.open failed:', e);
               }
-            }, 1000);
+            }, 200);
             
           } else {
             // For regular browsers, use multiple methods for better compatibility
@@ -590,19 +609,19 @@
           }
         }
         
-        // Update button text and fallback text for Messenger users
+        // Update button text for Messenger users (try app first, like TripCount)
         if (inMessenger) {
-          openAppButton.textContent = 'Copy Link & Open in Browser';
-          subtitle.textContent = 'Messenger detected! Tap the button to copy the link, then paste it in your browser to join the trip.';
+          openAppButton.textContent = 'Open in Mandarin App';
+          subtitle.textContent = 'Tap the button below to open this trip invite in the Mandarin app.';
           
           // Update fallback text for Messenger
           const fallbackText = document.getElementById('fallback-text');
           const fallbackInstructions = document.getElementById('fallback-instructions');
           if (fallbackText) {
-            fallbackText.textContent = 'Messenger blocks app links for security. Copy the link and open it in your browser to join the trip.';
+            fallbackText.textContent = 'Can\'t open the app? Make sure you have Mandarin installed, or download it below and try again.';
           }
           if (fallbackInstructions) {
-            fallbackInstructions.textContent = '1. Tap "Copy Link & Open in Browser" above 2. Copy the link that appears 3. Paste it in Safari/Chrome 4. The Mandarin app will open automatically.';
+            fallbackInstructions.textContent = 'After installing, come back to this link and tap "Open in Mandarin App" again.';
           }
         }
 
@@ -611,45 +630,25 @@
           hasAttemptedOpen = true;
           
           if (inMessenger) {
-            // For Messenger, copy the link to clipboard
-            console.log('Messenger detected, copying link to clipboard');
+            // For Messenger, try to open the app directly (like TripCount)
+            console.log('Messenger detected, attempting to open app directly');
             
-            // Create URL that will auto-redirect in external browser
-            const currentUrl = window.location.href;
-            const externalUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'external=true&auto=true';
+            // Try multiple methods to open the app
+            attemptDeepLink();
             
-            // Try to copy to clipboard
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(externalUrl).then(() => {
-                console.log('Link copied to clipboard');
-                // Show success message
-                openAppButton.textContent = 'Link Copied! Open in Browser';
-                openAppButton.style.background = '#16a34a';
-                
-                // Try to open in external browser as well
-                setTimeout(() => {
-                  try {
-                    window.open(externalUrl, '_blank', 'noopener,noreferrer');
-                  } catch (e) {
-                    console.log('Could not open external browser');
-                  }
-                }, 500);
-                
-                // Reset button after 3 seconds
-                setTimeout(() => {
-                  openAppButton.textContent = 'Copy Link & Open in Browser';
-                  openAppButton.style.background = '';
-                }, 3000);
-                
-              }).catch(err => {
-                console.log('Failed to copy to clipboard:', err);
-                // Fallback: show the link in an alert
-                alert(`Copy this link and open it in your browser:\n\n${externalUrl}`);
-              });
-            } else {
-              // Fallback for older browsers
-              alert(`Copy this link and open it in your browser:\n\n${externalUrl}`);
-            }
+            // Try again after a short delay
+            setTimeout(() => {
+              if (document.visibilityState === 'visible') {
+                attemptDeepLink();
+              }
+            }, 500);
+            
+            // Show fallback after delay to give app time to open
+            setTimeout(() => {
+              if (document.visibilityState === 'visible') {
+                fallback.hidden = false;
+              }
+            }, 3000);
           } else {
             // For regular browsers, use the standard approach
             // Try multiple times with different methods for better reliability
