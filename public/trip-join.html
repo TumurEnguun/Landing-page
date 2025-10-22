@@ -478,13 +478,13 @@
       };
 
       if (tripId) {
-        // Try multiple deep link formats - Universal Links first for better Messenger support
+        // Try multiple deep link formats - Custom schemes for web browsers
         const deepLinks = [
-          `https://mandarinpay.app/trip-join.html/${tripId}`, // Universal Link - works in Messenger
-          `mandarinapp://trip/${tripId}/join`,     // Custom scheme - fallback
+          `mandarinapp://trip/${tripId}/join`,     // Custom scheme - works in web browsers
           `mandarinapp:///trip/${tripId}/join`,    // Custom scheme variant
           `mandarin://trip/${tripId}/join`,        // Alternative scheme
-          `mandarin:///trip/${tripId}/join`        // Alternative scheme variant
+          `mandarin:///trip/${tripId}/join`,        // Alternative scheme variant
+          `https://mandarinpay.app/trip-join.html/${tripId}` // Universal Link - fallback
         ];
         
         const primaryDeepLink = deepLinks[0];
@@ -563,49 +563,49 @@
             }, 200);
             
           } else {
-            // For regular browsers, use multiple methods for better compatibility
-            console.log('Using multi-method approach for better browser compatibility');
+            // For regular browsers, use custom schemes for better app opening
+            console.log('Using custom scheme approach for web browsers');
             
-            // Method 1: Try direct navigation first
+            // Method 1: Try direct navigation with custom scheme
             try {
               window.location.href = primaryDeepLink;
             } catch (e) {
               console.log('Direct navigation failed:', e);
             }
             
-            // Method 2: Try with window.open as backup
+            // Method 2: Try window.open as backup
             setTimeout(() => {
               try {
-                const newWindow = window.open(primaryDeepLink, '_self');
-                if (!newWindow) {
-                  console.log('Window.open blocked, trying iframe method');
-                  // Method 3: Iframe fallback
-                  const iframe = document.createElement('iframe');
-                  iframe.style.display = 'none';
-                  iframe.style.width = '1px';
-                  iframe.style.height = '1px';
-                  iframe.src = primaryDeepLink;
-                  document.body.appendChild(iframe);
-                  
-                  setTimeout(() => {
-                    if (document.body.contains(iframe)) {
-                      document.body.removeChild(iframe);
-                    }
-                  }, 2000);
-                }
+                window.open(primaryDeepLink, '_self');
               } catch (e) {
                 console.log('Window.open failed:', e);
               }
             }, 100);
             
-            // Method 4: Try again with a slight delay (helps with Brave)
+            // Method 3: Try iframe method for blocked popups
+            setTimeout(() => {
+              const iframe = document.createElement('iframe');
+              iframe.style.display = 'none';
+              iframe.style.width = '1px';
+              iframe.style.height = '1px';
+              iframe.src = primaryDeepLink;
+              document.body.appendChild(iframe);
+              
+              setTimeout(() => {
+                if (document.body.contains(iframe)) {
+                  document.body.removeChild(iframe);
+                }
+              }, 2000);
+            }, 200);
+            
+            // Method 4: Try again with a slight delay (helps with some browsers)
             setTimeout(() => {
               try {
                 window.location.href = primaryDeepLink;
               } catch (e) {
                 console.log('Second attempt failed:', e);
               }
-            }, 200);
+            }, 300);
           }
         }
         
