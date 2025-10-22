@@ -27,14 +27,13 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   build: {
+    target: 'esnext',
+    minify: 'esbuild',
     rollupOptions: {
-      external: [],
       output: {
         manualChunks: undefined,
       },
     },
-    target: 'esnext',
-    minify: 'esbuild',
   },
   server: {
     headers: {
