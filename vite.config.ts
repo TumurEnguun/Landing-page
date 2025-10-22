@@ -37,11 +37,5 @@ export default defineConfig({
   },
   define: {
     'process.env.NODE_ENV': '"production"',
-  },
-  server: {
-    headers: {
-      '/.well-known/apple-app-site-association': ['Content-Type: application/json'],
-      '/.well-known/assetlinks.json': ['Content-Type: application/json']
-    }
   }
 });
