@@ -23,19 +23,7 @@ const copyWellKnownPlugin = () => ({
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), copyWellKnownPlugin()],
-  optimizeDeps: {
-    exclude: ['lucide-react'],
-  },
   build: {
-    target: 'esnext',
     minify: 'esbuild',
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
-  },
-  define: {
-    'process.env.NODE_ENV': '"production"',
   }
 });
