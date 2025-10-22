@@ -26,6 +26,16 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    rollupOptions: {
+      external: [],
+      output: {
+        manualChunks: undefined,
+      },
+    },
+    target: 'esnext',
+    minify: 'esbuild',
+  },
   server: {
     headers: {
       '/.well-known/apple-app-site-association': ['Content-Type: application/json'],
