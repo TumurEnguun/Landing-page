@@ -23,6 +23,10 @@
     {
       "source": "/trip-join.html/:tripId",
       "destination": "/trip-join.html"
+    },
+    {
+      "source": "/join/:tripId",
+      "destination": "/join/index.html"
     }
   ]
 }
