@@ -397,7 +397,7 @@
               fallback.hidden = false;
               openAppButton.textContent = 'Open in the app';
             }
-          }, 1500); // Reduced from 3000ms to 1500ms
+          }, 2000); // 2 seconds should be enough
         }
       }
       
@@ -629,6 +629,9 @@
           event.preventDefault();
           hasAttemptedOpen = true;
           
+          // Show loading state
+          openAppButton.textContent = 'Opening app...';
+          
           if (inMessenger) {
             // For Messenger, try to open the app directly (like TripCount)
             console.log('Messenger detected, attempting to open app directly');
@@ -647,6 +650,7 @@
             setTimeout(() => {
               if (document.visibilityState === 'visible') {
                 fallback.hidden = false;
+                openAppButton.textContent = 'Open in Mandarin App';
               }
             }, 3000);
           } else {
@@ -665,6 +669,7 @@
             setTimeout(() => {
               if (document.visibilityState === 'visible') {
                 fallback.hidden = false;
+                openAppButton.textContent = 'Open in the app';
               }
             }, 4000);
           }
