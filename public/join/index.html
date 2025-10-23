@@ -4,21 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join Trip - Mandarin</title>
+    <meta http-equiv="refresh" content="0;url=https://mandarinpay.app">
     <script>
-        // Get trip ID from URL path
-        const pathParts = window.location.pathname.split('/').filter(Boolean);
-        const tripId = pathParts[pathParts.length - 1];
-        
-        if (tripId) {
-            // Redirect to trip-join.html with the trip ID
-            window.location.href = `/trip-join.html/${tripId}`;
-        } else {
-            // Fallback to main page
-            window.location.href = '/';
-        }
+        // This page should never be reached in normal flow
+        // Universal Links should open the app directly
+        // If we get here, it means the Universal Link failed, so redirect to home
+        console.log('Universal Link failed - redirecting to home page');
+        window.location.href = 'https://mandarinpay.app';
     </script>
 </head>
 <body>
-    <p>Redirecting...</p>
+    <p>Redirecting to Mandarin...</p>
 </body>
 </html>

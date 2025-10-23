@@ -26,7 +26,7 @@
     },
     {
       "source": "/join/:tripId",
-      "destination": "/join/index.html"
+      "destination": "/trip-join.html"
     }
   ]
 }
