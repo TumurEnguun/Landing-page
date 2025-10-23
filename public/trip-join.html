@@ -458,7 +458,7 @@
         debugDiv.innerHTML = `
           <strong>Deep Link Debug:</strong><br>
           Trip ID: ${tripId || 'NOT FOUND'}<br>
-          Universal Link: ${tripId ? `https://mandarinpay.app/trip-join.html/${tripId}` : 'N/A'}<br>
+          Universal Link: ${tripId ? `https://mandarinpay.app/join/${tripId}` : 'N/A'}<br>
           Custom Scheme: ${tripId ? `mandarinapp://trip/${tripId}/join` : 'N/A'}<br>
           Current URL: ${window.location.href}<br>
           <button onclick="testDeepLink()" style="margin-top: 10px; padding: 5px 10px; background: #22c55e; color: white; border: none; border-radius: 5px;">Test Universal Link</button>
@@ -469,7 +469,7 @@
       // Test function for debugging
       window.testDeepLink = function() {
         if (tripId) {
-          const testLink = `https://mandarinpay.app/trip-join.html/${tripId}`;
+          const testLink = `https://mandarinpay.app/join/${tripId}`;
           console.log('Testing Universal Link:', testLink);
           window.location.href = testLink;
         } else {
@@ -480,7 +480,7 @@
       if (tripId) {
         // Try multiple deep link formats - Universal Links first for better Messenger support
         const deepLinks = [
-          `https://mandarinpay.app/trip-join.html/${tripId}`, // Universal Link - works in Messenger
+          `https://mandarinpay.app/join/${tripId}`, // Universal Link - properly configured in app
           `mandarinapp://trip/${tripId}/join`,     // Custom scheme - fallback
           `mandarinapp:///trip/${tripId}/join`,    // Custom scheme variant
           `mandarin://trip/${tripId}/join`,        // Alternative scheme
@@ -508,8 +508,8 @@
         document.querySelector('meta[name="apple-itunes-app"]').setAttribute('content', `app-argument=${primaryDeepLink}`);
         
         // Update Universal Links and App Links with web URLs
-        const iosWebUrl = `https://mandarinpay.app/trip-join.html/${tripId}`;
-        const androidWebUrl = `https://mandarinpay.app/trip-join.html/${tripId}`;
+        const iosWebUrl = `https://mandarinpay.app/join/${tripId}`;
+        const androidWebUrl = `https://mandarinpay.app/join/${tripId}`;
         
         // Add additional meta tags for Universal Links
         const additionalIosMeta = document.createElement('meta');
