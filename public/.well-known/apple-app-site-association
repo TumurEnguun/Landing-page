@@ -4,7 +4,7 @@
     "details": [
       {
         "appID": "TAHZF5W734.com.mandarin.expensetracker",
-        "paths": ["/join/*", "/trip/*/join", "/trip-join.html", "/trip-join.html/*"]
+        "paths": ["/join/*"]
       }
     ]
   },

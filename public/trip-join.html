@@ -242,7 +242,7 @@
           <span>Mandarin</span>
         </div>
         <h1>Open the invite in Mandarin</h1>
-        <p id="subtitle" class="lead">This page will automatically try to open the Mandarin app in a few seconds, or you can tap the button below.</p>
+        <p id="subtitle" class="lead">Opening the Mandarin app... If you don't have the app yet, we'll redirect you to download it.</p>
         <div id="debug-info" style="display: none; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 12px; color: #666;">
           <strong>Debug Info:</strong><br>
           <span id="debug-user-agent"></span><br>
@@ -360,6 +360,10 @@
       console.log('User Agent:', navigator.userAgent);
       console.log('Referrer:', document.referrer);
 
+      // 📱 Platform Detection
+      const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+      const isAndroid = /Android/.test(navigator.userAgent);
+      console.log('Platform Detection:', { isIOS, isAndroid });
 
       let fallbackTimer;
       let hasAttemptedOpen = false;
@@ -367,6 +371,7 @@
       // Auto-redirect functionality
       let countdownInterval;
       let autoRedirectTimeout;
+      let storeRedirectTimeout;
       
       function startAutoRedirect() {
         if (tripId && !inMessenger) {
@@ -390,7 +395,28 @@
           // Attempt to open the app immediately
           attemptDeepLink();
           
-          // Show fallback after shorter delay if app doesn't open
+          // 🚀 Smart App Store Redirect
+          // If the app doesn't open (user still on page), redirect to store
+          storeRedirectTimeout = setTimeout(() => {
+            if (document.visibilityState === 'visible') {
+              console.log('App not installed, redirecting to store...');
+              
+              if (isIOS) {
+                console.log('Redirecting to iOS App Store');
+                window.location.href = 'https://apps.apple.com/app/mandarin/id6751082606';
+              } else if (isAndroid) {
+                console.log('Redirecting to Google Play Store');
+                window.location.href = 'https://play.google.com/store/apps/details?id=com.mandarin.expensetracker';
+              } else {
+                // Desktop or unknown platform - show manual download options
+                console.log('Unknown platform, showing fallback');
+                fallback.hidden = false;
+                openAppButton.textContent = 'Open in the app';
+              }
+            }
+          }, 2500); // 2.5 seconds - enough time for app to open, quick enough for users
+          
+          // Show fallback after shorter delay if app doesn't open (backup)
           autoRedirectTimeout = setTimeout(() => {
             if (document.visibilityState === 'visible') {
               console.log('Auto-redirect failed, showing fallback');
@@ -407,6 +433,9 @@
         }
         if (autoRedirectTimeout) {
           clearTimeout(autoRedirectTimeout);
+        }
+        if (storeRedirectTimeout) {
+          clearTimeout(storeRedirectTimeout);
         }
         
         const cancelButton = document.getElementById('cancel-redirect');
@@ -429,13 +458,23 @@
         // Try to open the app immediately in Messenger
         attemptDeepLink();
         
-        // Show fallback after delay if app doesn't open
+        // 🚀 Smart redirect for in-app browsers too
         setTimeout(() => {
           if (document.visibilityState === 'visible') {
-            console.log('App did not open in Messenger, showing fallback');
-            fallback.hidden = false;
+            console.log('App did not open in Messenger, redirecting to store...');
+            
+            if (isIOS) {
+              console.log('Redirecting to iOS App Store from Messenger');
+              window.location.href = 'https://apps.apple.com/app/mandarin/id6751082606';
+            } else if (isAndroid) {
+              console.log('Redirecting to Google Play Store from Messenger');
+              window.location.href = 'https://play.google.com/store/apps/details?id=com.mandarin.expensetracker';
+            } else {
+              // Unknown platform - show fallback
+              fallback.hidden = false;
+            }
           }
-        }, 2000);
+        }, 2500);
       } else if (isExternal && shouldAuto) {
         // External browser opened from Messenger - start auto-redirect immediately
         console.log('External browser detected, starting auto-redirect immediately');
